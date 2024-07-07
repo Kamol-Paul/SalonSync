@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.my-header {
+  margin: 0.4rem auto 0 auto;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 0.6rem;
+  width: 80vw;
+  background-color: #a9c1ff;
+}
+
+.header-text {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
