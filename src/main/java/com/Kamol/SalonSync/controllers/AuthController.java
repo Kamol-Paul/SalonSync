@@ -3,17 +3,21 @@ package com.Kamol.SalonSync.controllers;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
-
+import java.util.Optional;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +34,7 @@ import com.Kamol.SalonSync.repository.RoleRepository;
 import com.Kamol.SalonSync.repository.UserRepository;
 import com.Kamol.SalonSync.security.jwt.JwtUtils;
 import com.Kamol.SalonSync.security.services.UserDetailsImpl;
+import com.Kamol.SalonSync.services.EmailService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -44,14 +49,22 @@ public class AuthController {
 	RoleRepository roleRepository;
 
 	@Autowired
-	PasswordEncoder encoder;
+	BCryptPasswordEncoder encoder;
 
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	@Autowired 
+	private EmailService emailService; 
 
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+		Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
+		if(user.isPresent()){
+			if(user.get().getEnable() == false){
+				return ResponseEntity.badRequest().body("Account is not enabled.");
+			}
+		}
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -72,7 +85,10 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, HttpServletRequest request) {
+		String url = request.getRequestURL().toString();
+		url = url.replace(request.getServletPath(), "");
+	
 		System.out.println(signUpRequest);
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
@@ -126,10 +142,32 @@ public class AuthController {
 				}
 			});
 		}
-
+		user.setEnable(false);
+		user.setVerificationCode(UUID.randomUUID().toString());
 		user.setRoles(roles);
-		userRepository.save(user);
+		user = userRepository.save(user);
+
+		if(user != null){
+			emailService.sendSimpleMail(user, url);
+		}
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+	@GetMapping("/verify")
+	public ResponseEntity<?> verifyAccount(@Param("code") String code) {
+		System.out.print(code);
+		Optional<User> user = userRepository.findByVerificationCode(code);
+
+		if (user.isEmpty()) {
+			return ResponseEntity.badRequest().body("Verification code is false or already validated.");
+		} 
+
+		user.get().setEnable(true);
+		user.get().setVerificationCode(null);
+
+		userRepository.save(user.get());
+
+		return ResponseEntity.ok(new MessageResponse("Account verified."));
+		
 	}
 }

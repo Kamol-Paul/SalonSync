@@ -42,6 +42,9 @@ public class User {
     @Size(min = 11)
     private String phoneNumber;
 
+    private Boolean enable;
+    private String verificationCode;
+
     @DBRef
     private Set<Role> roles = new HashSet<>();
 
