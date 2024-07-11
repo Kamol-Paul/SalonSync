@@ -1,9 +1,14 @@
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
+    const navigate = useNavigate();
+
     return (
-        <div className="sticky top-0 w-full shadow-md my-header align-middle">
+        <div className="sticky top-0 w-full shadow-md my-header align-middle z-50">
             {/* container */}
-            <div className="flex-row flex justify-between max-w-[960px] m-auto">
-                <div className="text-[2rem] font-bold my-3 z-30 header-text">
+            <div                
+                className="flex-row flex justify-between max-w-[960px] m-auto cursor-pointer">
+                <div className="text-[2rem] font-bold my-3 z-30 stroke-text" onClick={() => { navigate("/") }}>
                     <span className="text-blue-700">Salon</span>
                     <span className="text-[#d18d32]">
                         Sync
@@ -11,6 +16,7 @@ const Header = () => {
                 </div>
                 <div>
                     <button
+                        onClick={() => { navigate("/login") }}
                         type="button"
                         className="h-[2.2rem] text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center me-2 mt-[1rem] border-gray-800 border-2"
                     >
@@ -18,6 +24,7 @@ const Header = () => {
                         Login
                     </button>
                     <button
+                        onClick={() => { navigate("/register"); }}
                         type="button"
                         className="h-[2.2rem] text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center me-2 mt-[1rem] border-gray-800 border-2"
                     >

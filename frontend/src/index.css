@@ -12,7 +12,15 @@
   background-color: #a9c1ff;
 }
 
-.header-text {
+.stroke-text {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
+}
+
+.glass-bg {
+  background-color: rgba(28, 28, 28, 0.2); /* Base color with transparency */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for older browsers */
+  border-radius: 10px; /* Optional: Rounded corners */
+  padding: 20px; /* Optional: Adjust padding as needed */
 }
