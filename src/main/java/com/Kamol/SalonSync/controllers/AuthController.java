@@ -67,7 +67,7 @@ public class AuthController {
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
 		Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 		if(user.isPresent()){
-			if(user.get().getEnable() == false){
+			if(!user.get().getEnable()){
 				return ResponseEntity.badRequest().body("Account is not enabled.");
 			}
 		}
@@ -188,7 +188,7 @@ public class AuthController {
 
 		try {
 			customerService.updateResetPasswordToken(token, email);
-//			emailService.sendMail(email,token);
+			emailService.sendMail(email,token);
 
 		} catch (Exception e) {
             throw new RuntimeException(e);
