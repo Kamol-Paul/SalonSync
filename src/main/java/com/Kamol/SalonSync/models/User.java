@@ -45,10 +45,12 @@ public class User {
     private Boolean enable;
     private String verificationCode;
 
+    private String resetPasswordToken;
+
     @DBRef
     private Set<Role> roles = new HashSet<>();
 
-    
+
     public User(String username, String email, String password, String phoneNumber) {
         this.username = username;
         this.email = email;

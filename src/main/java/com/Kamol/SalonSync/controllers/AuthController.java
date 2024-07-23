@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.Optional;
+
+import com.Kamol.SalonSync.payload.request.ForgetPassword;
+import com.Kamol.SalonSync.services.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -55,7 +58,10 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@Autowired 
-	private EmailService emailService; 
+	private EmailService emailService;
+
+	@Autowired
+	CustomerService customerService;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
@@ -169,5 +175,38 @@ public class AuthController {
 
 		return ResponseEntity.ok(new MessageResponse("Account verified."));
 		
+	}
+
+	@PostMapping("/forgetPassword")
+	public String processForgotPassword(@RequestBody ForgetPassword forgetPassword, HttpServletRequest request) {
+		String email = forgetPassword.getEmail();
+		System.out.println(request);
+		String token = UUID.randomUUID().toString();
+		token = token.substring(0,4);
+		System.out.println(email);
+		System.out.println(token);
+
+		try {
+			customerService.updateResetPasswordToken(token, email);
+//			emailService.sendMail(email,token);
+
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+		return "We have sent a reset password link to your mail. Please check.";
+    }
+	@PostMapping("/checkOTP")
+	public boolean checkOTP(@RequestBody ForgetPassword forgetPassword){
+		return customerService.checkOPT(forgetPassword.getEmail(), forgetPassword.getOpt());
+	}
+
+	@PostMapping("/updatePassword")
+	public boolean updatePassword(@RequestBody ForgetPassword forgetPassword){
+		if(customerService.checkOPT(forgetPassword.getEmail(), forgetPassword.getOpt())){
+			customerService.UpdatePassword(forgetPassword.getEmail(), forgetPassword.getNewPassword());
+			return true;
+		}
+		return  false;
 	}
 }

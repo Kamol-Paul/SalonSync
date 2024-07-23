@@ -4,4 +4,5 @@ import com.Kamol.SalonSync.models.User;
 
 public interface EmailService {
     void sendSimpleMail(User user, String url);
+    void sendMail(String email, String url);
 }

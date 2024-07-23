@@ -1,5 +1,6 @@
 package com.Kamol.SalonSync.implimentation;
 
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,8 @@ import jakarta.mail.internet.MimeMessage;
 
 import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.services.EmailService;
+
+import java.io.UnsupportedEncodingException;
 
 @Service
 public class EmailServiceImpl implements EmailService {     
@@ -51,4 +54,37 @@ public class EmailServiceImpl implements EmailService {
 
 
         }
+
+    @Override
+    public void sendMail(String recipientEmail, String link) {
+        String from = "chobichokro@gmail.com";
+
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setFrom(from, "SalonSync");
+            helper.setTo(recipientEmail);
+
+            String subject = "Here's the link to reset your password";
+
+            String content = "<p>Hello,</p>"
+                    + "<p>You have requested to reset your password.</p>"
+                    + "<p>Your Password changing otp is:" + link + "</p>"
+                                        + "<br>"
+                    + "<p>Ignore this email if you do remember your password, "
+                    + "or you have not made the request.</p>";
+
+            helper.setSubject(subject);
+
+            helper.setText(content, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
