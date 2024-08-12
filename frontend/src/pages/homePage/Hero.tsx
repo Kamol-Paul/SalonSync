@@ -13,7 +13,7 @@ const Hero = () => {
         <div className='relative h-screen w-[80vw] m-auto'>
             <video autoPlay
                 muted
-                loop className='absolute inset-0 max-w-[960px] h-screen object-cover object-left'>
+                loop className='absolute inset-0 w-[52vw] max-w-[960px] h-screen object-cover object-left'>
                 <source src={video} />
             </video>
             <div className='relative top-[30%] w-[26rem] float-right translate-y-[-30%]'>

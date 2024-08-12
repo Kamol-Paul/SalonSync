@@ -1,14 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom'
 import HomePage from './pages/homePage/HomePage.tsx';
-import RegistrationPage from './pages/homePage/registrationPage/RegistrationPage.tsx';
-import LoginPage from './pages/homePage/loginPage/LoginPage.tsx';
-import { SalonRegistration } from './pages/homePage/registrationPage/SalonRegistration.tsx';
+import RegistrationPage from './pages/registrationPage/RegistrationPage.tsx';
+import LoginPage from './pages/loginPage/LoginPage.tsx';
+import MainDashboard from './pages/customerDashboard/mainDashboard.tsx';
 
 export const routes = createBrowserRouter([
   { path: '/', element: <HomePage /> },
   { path: '/register', element: <RegistrationPage /> },
   { path: '/login', element: <LoginPage /> },
-  { path: '/s', element: <SalonRegistration /> }
+  { path: '/customer-dashboard', element: <MainDashboard /> },
 ]);
 
 

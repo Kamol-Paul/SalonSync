@@ -1,55 +1,11 @@
 import { useState } from "react";
-import IconButton from "../../../components/iconButton/IconButton";
-import imgUpload from "../../../assets/imgUpload.png";
-import salonReg from "../../../assets/salonReg.svg";
+import IconButton from "../../components/iconButton/IconButton";
+import imgUpload from "../../assets/imgUpload.png";
+import salonReg from "../../assets/salonReg.svg";
 import { FaArrowAltCircleRight } from "react-icons/fa";
-import { IoAddCircleOutline } from "react-icons/io5";
+import { SalonRegistration2 } from "./SalonRegistration2";
+import { SalonRegistration3 } from "./SalonRegistration3";
 
-
-function RegistrationNext() {
-  return (
-    <div>
-      <div className="flex flex-col w-[20rem]">
-        <input
-          type="text"
-          placeholder="Enter your salon name"
-          className="border border-black outline-none p-2 rounded-md mb-4"
-        />
-
-        <input
-          type="text"
-          placeholder="Enter your salon address"
-          className="border border-black outline-none p-2 rounded-md mb-4"
-        />
-
-        <input
-          type="text"
-          placeholder="Enter your phone number"
-          className="border border-black outline-none p-2 rounded-md mb-4"
-        />
-
-        <input
-          type="text"
-          placeholder="Enter your email"
-          className="border border-black outline-none p-2 rounded-md mb-4"
-        />
-
-        <input
-          type="password"
-          placeholder="Enter your password"
-          className="border border-black outline-none p-2 rounded-md mb-4"
-        />
-
-
-        <IconButton
-          icon={<IoAddCircleOutline size={20} />}
-          text="Register"
-          callback={() => { }}
-        />
-      </div>
-    </div>
-  );
-}
 
 export function SalonRegistration() {
   const [page, setPage] = useState(1);
@@ -61,7 +17,7 @@ export function SalonRegistration() {
 
   return (
     <div
-      className="rounded-sm glass-bg p-6 max-w-[960px] m-auto border border-black"
+      className="rounded-sm glass-bg p-6 m-auto border border-black max-w-[960px]"
       style={{
         backgroundColor: "rgb(87 112 182 / 32%)",
       }}
@@ -75,11 +31,10 @@ export function SalonRegistration() {
       >
         Salon Registration
       </h1>
-      <div className="flex flex-row space-x-10">
-
+      <div className="flex flex-row space-x-10 justify-around">
         <div className="flex flex-col w-[20rem]">
           <img
-            className="h-[30rem] bg-white rounded-xl w-[20rem] bg-opacity-75"
+            className="h-[30rem] bg-white rounded-xl w-[20rem] bg-opacity-50"
             src={salonReg}
             alt="Salon Registration" />
         </div>
@@ -146,19 +101,15 @@ export function SalonRegistration() {
                   className="border border-black outline-none p-2 rounded-md mb-4"
                 />
 
-
                 <IconButton
                   icon={<FaArrowAltCircleRight />}
                   text="Next"
                   callback={() => { setPage(2) }}
                 />
               </div>
-            </div> : page === 2 ? <RegistrationNext /> : null
+            </div> : page === 2 ? <SalonRegistration2 setPage={setPage} /> :
+              page === 3 ? <SalonRegistration3 setPage={setPage} /> : null
         }
-
-
-
-
       </div>
     </div>
   );
