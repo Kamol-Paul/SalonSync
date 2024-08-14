@@ -5,17 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class SalonUpdateRequest {
-    private String image;
+public class ServiceRequest {
     private String name;
-    private String address;
-    private Set<ServiceRequest> serviceRequestSet;
+    private String cost;
+    private String image;
 }

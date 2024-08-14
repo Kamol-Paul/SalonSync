@@ -46,12 +46,12 @@ public class SalonController {
         return ResponseEntity.ok("Address updated");
     }
 
-    @PutMapping("/update_price")
+    @PutMapping("/update_services")
     @PreAuthorize("hasRole('ROLE_SALON')")
     public ResponseEntity<?> updatePriceList(HttpServletRequest request, @RequestBody SalonUpdateRequest salonUpdateRequest){
         User owner = jwtUtils.getUserFromRequest(request);
-        salonHelper.updatePriceList(owner.getId(), salonUpdateRequest.getPriceList());
-        return ResponseEntity.ok("Address updated");
+        salonHelper.updatePriceList(owner.getId(), salonUpdateRequest.getServiceRequestSet());
+        return ResponseEntity.ok("Services updated");
     }
 
     @PutMapping("/add_barber")

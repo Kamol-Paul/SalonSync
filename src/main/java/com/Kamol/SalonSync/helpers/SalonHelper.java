@@ -3,9 +3,11 @@ package com.Kamol.SalonSync.helpers;
 import com.Kamol.SalonSync.models.Barber;
 import com.Kamol.SalonSync.models.Salon;
 import com.Kamol.SalonSync.payload.request.BarberRequest;
+import com.Kamol.SalonSync.payload.request.ServiceRequest;
 import com.Kamol.SalonSync.payload.response.ShopResponse;
 import com.Kamol.SalonSync.repository.BarberRepository;
 import com.Kamol.SalonSync.repository.SalonRepository;
+import com.Kamol.SalonSync.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class SalonHelper {
     SalonRepository salonRepository;
     @Autowired
     BarberRepository barberRepository;
+
+    @Autowired
+    ServiceRepository serviceRepository;
     public void updateImage(String id, String image){
         Salon salon = salonRepository.findById(id).get();
         salon.setImage(image);
@@ -34,16 +39,21 @@ public class SalonHelper {
         salon.setName(name);
         salonRepository.save(salon);
     }
-    public void updatePriceList(String id, Map<String , Long>priceList){
+    public void updatePriceList(String id, Set<ServiceRequest> serviceRequestSet){
         Salon salon = salonRepository.findById(id).get();
-        Map<String,Long> list = salon.getPriceList();
+        Set<com.Kamol.SalonSync.models.Service> list = salon.getServicesList();
         if(list == null){
-            list = new HashMap<>();
+            list = new HashSet<>();
         }
-        for(Map.Entry<String ,Long> entry: priceList.entrySet()){
-            list.put(entry.getKey(),entry.getValue());
+        for(ServiceRequest entry: serviceRequestSet){
+            com.Kamol.SalonSync.models.Service newService = new com.Kamol.SalonSync.models.Service();
+            newService.setCost(entry.getCost());
+            newService.setName(entry.getName());
+            newService.setImage(entry.getImage());
+            newService = serviceRepository.save(newService);
+            list.add(newService);
         }
-        salon.setPriceList(list);
+        salon.setServicesList(list);
         salonRepository.save(salon);
     }
 
