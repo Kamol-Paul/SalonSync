@@ -1,14 +1,19 @@
 package com.Kamol.SalonSync.security.jwt;
 
+import com.Kamol.SalonSync.repository.UserRepository;
 import com.Kamol.SalonSync.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import com.Kamol.SalonSync.models.User;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -16,7 +21,8 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-
+    @Autowired
+    UserRepository userRepository;
     @Value("${SalonSync.app.jwtSecret}")
     private String jwtSecret;
 
@@ -43,6 +49,11 @@ public class JwtUtils {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
+    public User getUserFromRequest(HttpServletRequest request){
+        String token = parseJwt(request);
+        String username = getUserNameFromJwtToken(token);
+        return userRepository.findByUsername(username).get();
+    }
 
     public boolean validateJwtToken(String authToken) {
         try {
@@ -60,5 +71,14 @@ public class JwtUtils {
         }
 
         return false;
+    }
+    String parseJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.substring(7);
+        }
+
+        return null;
     }
 }

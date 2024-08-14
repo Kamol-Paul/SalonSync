@@ -1,5 +1,9 @@
 package com.Kamol.SalonSync.controllers;
 
+import com.Kamol.SalonSync.models.User;
+import com.Kamol.SalonSync.security.jwt.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+	@Autowired
+	JwtUtils jwtUtils;
 	@GetMapping("/all")
 	public String allAccess() {
 		return "Public Content.";
@@ -23,7 +29,9 @@ public class TestController {
 
 	@GetMapping("/salon")
 	@PreAuthorize("hasRole('ROLE_SALON')")
-	public String moderatorAccess() {
+	public String salonAccess(HttpServletRequest request) {
+		User user = jwtUtils.getUserFromRequest(request);
+		System.out.println(user);
 		return "SALON Board.";
 	}
 

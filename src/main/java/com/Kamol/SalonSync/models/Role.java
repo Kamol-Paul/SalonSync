@@ -1,17 +1,14 @@
 package com.Kamol.SalonSync.models;
 
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Document(collection = "roles")
 public class Role {
     @Id

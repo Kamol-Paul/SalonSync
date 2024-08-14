@@ -7,7 +7,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
+import com.Kamol.SalonSync.models.Salon;
 import com.Kamol.SalonSync.payload.request.ForgetPassword;
+import com.Kamol.SalonSync.repository.SalonRepository;
 import com.Kamol.SalonSync.services.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -62,6 +64,8 @@ public class AuthController {
 
 	@Autowired
 	CustomerService customerService;
+	@Autowired
+	SalonRepository salonRepository;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
@@ -153,11 +157,9 @@ public class AuthController {
 		user.setRoles(roles);
 		user = userRepository.save(user);
 
-		if(user != null){
-			emailService.sendSimpleMail(user, url);
-		}
+        emailService.sendSimpleMail(user, url);
 
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	@GetMapping("/verify")
 	public ResponseEntity<?> verifyAccount(@Param("code") String code) {
@@ -172,6 +174,16 @@ public class AuthController {
 		user.get().setVerificationCode(null);
 
 		userRepository.save(user.get());
+		Role salonRole = roleRepository.findByName(ERole.ROLE_SALON).get();
+		Set<Role> userRoles = user.get().getRoles();
+		for(Role role: userRoles){
+			if(role.getName().equals(salonRole.getName())){
+				Salon salon = new Salon();
+				salon.setId(user.get().getId());
+				salon.setOwner(user.get());
+				salonRepository.save(salon);
+			}
+		}
 
 		return ResponseEntity.ok(new MessageResponse("Account verified."));
 		
