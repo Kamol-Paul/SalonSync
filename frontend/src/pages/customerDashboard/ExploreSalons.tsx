@@ -11,7 +11,7 @@ export default function ExploreSalons() {
             }} >
                 Explore Salons
             </h1>
-            <div className="flex flex-row flex-wrap justify-between space-y-4">                
+            <div className="flex flex-row flex-wrap justify-between">
                 <Card image={img} title="Cool Salon" price={120} />
                 <Card image={img} title="Cool Salon" price={120} />
                 <Card image={img} title="Cool Salon" price={120} />
@@ -28,8 +28,8 @@ export default function ExploreSalons() {
                 <Card image={img} title="Cool Salon" price={120} />
                 <Card image={img} title="Cool Salon" price={120} />
                 <Card image={img} title="Cool Salon" price={120} />
-                
-            </div> 
+
+            </div>
         </div>
     );
 }

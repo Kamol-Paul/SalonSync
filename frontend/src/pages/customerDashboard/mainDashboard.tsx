@@ -21,9 +21,17 @@ export default function MainDashboard() {
                                 icon: <FaArrowAltCircleRight className="w-6 h-6" />,
                             },
                             {
+                                title: "Appointments",
+                                icon: <RiLoginCircleLine className="w-6 h-6" />,
+                            },
+                            {
                                 title: "History",
                                 icon: <RiLoginCircleLine className="w-6 h-6" />,
                             },
+                            {
+                                title: "Logout",
+                                icon: <RiLoginCircleLine className="w-6 h-6" />,
+                            }
                         ]}
                         setIndex={setPageIndex}
                         index={pageIndex}
