@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { existsInLocalStorage } from "../../utils/localStorage";
+import { existsInLocalStorage, loadFromLocalStorage } from "../../utils/localStorage";
 import { LuMenuSquare } from "react-icons/lu";
 
 const Header = () => {
@@ -18,15 +18,18 @@ const Header = () => {
                 </div>
                 <div>
                     {
-                        existsInLocalStorage("customer-token") ?
+                        existsInLocalStorage("token") ?
                             <button
                                 onClick={() => {
-                                    navigate("/customer-dashboard");
+                                    loadFromLocalStorage("role") === "ROLE_CUSTOMER" ?
+                                        navigate("/customer-dashboard") :
+                                        loadFromLocalStorage("role") === "ROLE_SALON" ?
+                                            navigate("/salon-dashboard") : null;
                                 }}
                                 type="button"
                                 className="h-[2.2rem] text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center me-2 mt-[1rem] border-gray-800 border-2"
                             >
-                                <LuMenuSquare className="me-2 h-[1.2rem]"/>
+                                <LuMenuSquare className="me-2 h-[1.2rem]" />
                                 Dashboard
                             </button> :
                             <button

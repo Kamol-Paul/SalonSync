@@ -15,9 +15,7 @@ export default function RegistrationCutomer() {
         phoneNumber: "",
         email: "",
         password: "",
-        roles: [
-            "ROLE_CUSTOMER"
-        ]
+        roles: []
     });
 
     let [alert, setAlertBox] = useState({
@@ -26,8 +24,6 @@ export default function RegistrationCutomer() {
     });
 
     const onSubmit = () => {
-        console.log(formData);
-
         setAlertBox({
             isError: false,
             message: "Please wait..."

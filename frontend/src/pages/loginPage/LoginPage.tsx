@@ -75,10 +75,21 @@ export default function RegistrationPage() {
                 console.log(data);
                 setAlertBox({
                     isError: false,
-                    message: "Verification email sent. Please verify your email."
+                    message: "Redirecting..."
                 });
-                storeInLocalStorage("customer-token", data.data.token);
-                navigate("/customer-dashboard");
+                storeInLocalStorage("token", data.data.token);
+
+                let role = data.data.roles.length ? data.data.roles[0] : "ROLE_CUSTOMER";
+                storeInLocalStorage("role", role);
+
+                if (role === "ROLE_CUSTOMER") {
+                    navigate("/customer-dashboard");
+                    return;
+                }
+                else if (role === "ROLE_SALON") {
+                    navigate("/salon-dashboard");
+                    return;
+                }
             });
     };
 

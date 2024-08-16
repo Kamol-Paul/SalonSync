@@ -3,7 +3,6 @@ import NavigationBar from "../../components/navigationMenu/NavigationMenu";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import ExploreSalons from "./ExploreSalons";
 import bg from '../../assets/logRegBG.svg';
 import { useNavigate } from "react-router-dom";
 import { removeFromLocalStorage } from "../../utils/localStorage";
@@ -30,7 +29,7 @@ export function MainDashboard() {
                     <NavigationBar
                         navMenuContents={[
                             {
-                                title: "Explore Salons",
+                                title: "Salone Info",
                                 icon: <FaArrowAltCircleRight className="w-6 h-6" />,
                             },
                             {
@@ -60,7 +59,7 @@ export function MainDashboard() {
                         }}>
                             {
                                 pageIndex == 0 ?
-                                    <ExploreSalons /> :
+                                    < > </> :
                                     pageIndex == 1 ?
                                         <></> : <></>
                             }

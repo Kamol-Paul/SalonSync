@@ -2,13 +2,15 @@ import { createBrowserRouter } from 'react-router-dom'
 import HomePage from './pages/homePage/HomePage.tsx';
 import RegistrationPage from './pages/registrationPage/RegistrationPage.tsx';
 import LoginPage from './pages/loginPage/LoginPage.tsx';
-import MainDashboard from './pages/customerDashboard/mainDashboard.tsx';
+import { MainDashboard as CustomerDashboard } from './pages/customerDashboard/mainDashboard.tsx';
+import { MainDashboard as SalonDashboard } from './pages/salonDashboard/mainDashboard.tsx';
 
 export const routes = createBrowserRouter([
   { path: '/', element: <HomePage /> },
   { path: '/register', element: <RegistrationPage /> },
   { path: '/login', element: <LoginPage /> },
-  { path: '/customer-dashboard', element: <MainDashboard /> },
+  { path: '/customer-dashboard', element: <CustomerDashboard /> },
+  { path: '/salon-dashboard', element: <SalonDashboard /> },
 ]);
 
 
