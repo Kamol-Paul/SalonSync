@@ -162,12 +162,12 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	@GetMapping("/verify")
-	public ResponseEntity<?> verifyAccount(@Param("code") String code) {
+	public String verifyAccount(@Param("code") String code) {
 		System.out.print(code);
 		Optional<User> user = userRepository.findByVerificationCode(code);
 
 		if (user.isEmpty()) {
-			return ResponseEntity.badRequest().body("Verification code is false or already validated.");
+			return "Verification code is false or already validated.";
 		} 
 
 		user.get().setEnable(true);
@@ -176,16 +176,20 @@ public class AuthController {
 		userRepository.save(user.get());
 		Role salonRole = roleRepository.findByName(ERole.ROLE_SALON).get();
 		Set<Role> userRoles = user.get().getRoles();
+		String frontEndURL = "localhost:5173/";
 		for(Role role: userRoles){
 			if(role.getName().equals(salonRole.getName())){
 				Salon salon = new Salon();
 				salon.setId(user.get().getId());
 				salon.setOwner(user.get());
 				salonRepository.save(salon);
+				String redirectUrl = "http://" + frontEndURL + "login"; //"salon_dashboard";
+				return "redirect:" + redirectUrl;
 			}
 		}
+		String redirectUrl = "http://" + frontEndURL + "login"; // "customer_dashboard";
+		return "redirect:" + redirectUrl;
 
-		return ResponseEntity.ok(new MessageResponse("Account verified."));
 		
 	}
 

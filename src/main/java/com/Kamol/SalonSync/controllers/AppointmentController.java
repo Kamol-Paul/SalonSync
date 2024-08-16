@@ -5,6 +5,7 @@ import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.payload.request.AppointmentRequest;
 import com.Kamol.SalonSync.repository.AppointmentRepository;
 import com.Kamol.SalonSync.security.jwt.JwtUtils;
+import com.Kamol.SalonSync.services.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +24,8 @@ public class AppointmentController {
     JwtUtils jwtUtils;
     @Autowired
     AppointmentRepository appointmentRepository;
+    @Autowired
+    EmailService emailService;
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
@@ -77,6 +80,9 @@ public class AppointmentController {
             // mail and message function will be implimented
             appointment.setTime(new Date());
             appointmentRepository.save(appointment);
+            emailService.sendCalledMail(appointment);
+
+
         }
         return ResponseEntity.ok(appointment);
 

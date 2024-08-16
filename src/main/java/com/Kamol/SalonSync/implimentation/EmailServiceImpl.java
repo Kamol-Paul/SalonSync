@@ -1,5 +1,9 @@
 package com.Kamol.SalonSync.implimentation;
 
+import com.Kamol.SalonSync.models.Appointment;
+import com.Kamol.SalonSync.models.Salon;
+import com.Kamol.SalonSync.repository.SalonRepository;
+import com.Kamol.SalonSync.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,6 +23,11 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     JavaMailSender javaMailSender;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    SalonRepository salonRepository;
     @Value("${spring.mail.username}")
     private String sender;
 
@@ -74,6 +83,40 @@ public class EmailServiceImpl implements EmailService {
                                         + "<br>"
                     + "<p>Ignore this email if you do remember your password, "
                     + "or you have not made the request.</p>";
+
+            helper.setSubject(subject);
+
+            helper.setText(content, true);
+
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void sendCalledMail(Appointment appointment) {
+        String from = "chobichokro@gmail.com";
+        User customer = userRepository.findById(appointment.getUserId()).get();
+        Salon salon = salonRepository.findById(appointment.getSalonId()).get();
+
+        String recipientEmail = customer.getEmail();
+        try{
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+
+            helper.setFrom(from, "SalonSync");
+            helper.setTo(recipientEmail);
+
+            String subject = "Your request for salon appointment has been selected.";
+
+            String content = "<p>Hello," + customer.getUsername() + "</p>"
+                    + "<p>Please come to salon: " + salon.getName() + " in 15 minutes</p>"
+                    + "<p>Your Appointment id is :" + appointment.getId() + "</p>"
+                    + "<br>"
+                    + "<p>Thank you for choosing out platform.</p>";
 
             helper.setSubject(subject);
 
