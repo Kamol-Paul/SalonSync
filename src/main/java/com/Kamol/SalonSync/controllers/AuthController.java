@@ -123,7 +123,7 @@ public class AuthController {
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber());
-
+		user.setAddress(signUpRequest.getAddress());
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
 
@@ -169,6 +169,7 @@ public class AuthController {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("http://localhost:5173/login");
 		if (user.isEmpty()) {
+			redirectView.setUrl("http://localhost:5173/token-expired");
 			return redirectView;
 		} 
 

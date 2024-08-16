@@ -38,6 +38,7 @@ public class User {
     @NotBlank
     @Size(min = 11)
     private String phoneNumber;
+    private String address;
 
     private Boolean enable;
     private String verificationCode;
