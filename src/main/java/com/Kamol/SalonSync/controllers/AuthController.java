@@ -40,6 +40,7 @@ import com.Kamol.SalonSync.repository.UserRepository;
 import com.Kamol.SalonSync.security.jwt.JwtUtils;
 import com.Kamol.SalonSync.security.services.UserDetailsImpl;
 import com.Kamol.SalonSync.services.EmailService;
+import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -162,12 +163,13 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 	@GetMapping("/verify")
-	public String verifyAccount(@Param("code") String code) {
+	public RedirectView verifyAccount(@Param("code") String code) {
 		System.out.print(code);
 		Optional<User> user = userRepository.findByVerificationCode(code);
-
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl("http://localhost:5173/login");
 		if (user.isEmpty()) {
-			return "Verification code is false or already validated.";
+			return redirectView;
 		} 
 
 		user.get().setEnable(true);
@@ -184,11 +186,11 @@ public class AuthController {
 				salon.setOwner(user.get());
 				salonRepository.save(salon);
 				String redirectUrl = "http://" + frontEndURL + "login"; //"salon_dashboard";
-				return "redirect:" + redirectUrl;
+				return redirectView;
 			}
 		}
 		String redirectUrl = "http://" + frontEndURL + "login"; // "customer_dashboard";
-		return "redirect:" + redirectUrl;
+		return redirectView;
 
 		
 	}
