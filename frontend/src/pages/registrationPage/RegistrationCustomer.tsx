@@ -1,10 +1,101 @@
 import IconButton from "../../components/iconButton/IconButton";
 import customerReg from "../../assets/customerReg.svg";
 import { FaArrowAltCircleRight } from "react-icons/fa";
-
-
+// import { useNavigate } from "react-router-dom";
+// import { storeInLocalStorage } from "../../utils/localStorage";
+import { baseUrl } from "../../utils/constants";
+import { useState } from "react";
 
 export default function RegistrationCutomer() {
+    // const navigate = useNavigate();
+
+    let [formData, setFormData] = useState({
+        username: "",
+        address: "",
+        phoneNumber: "",
+        email: "",
+        password: "",
+        roles: [
+            "ROLE_CUSTOMER"
+        ]
+    });
+
+    let [alert, setAlertBox] = useState({
+        isError: false,
+        message: ""
+    });
+
+    const onSubmit = () => {
+        console.log(formData);
+
+        setAlertBox({
+            isError: false,
+            message: "Please wait..."
+        });
+
+        // check if all fields are filled
+        if (
+            !formData.username ||
+            !formData.address ||
+            !formData.phoneNumber ||
+            !formData.email ||
+            !formData.password
+        ) {
+            setAlertBox({
+                isError: true,
+                message: "All fields are required"
+            });
+            return;
+        }
+
+        if (formData.phoneNumber.length !== 11) {
+            setAlertBox({
+                isError: true,
+                message: "Phone number should be of 11 digits"
+            });
+            return;
+        }
+
+        if (formData.password.length < 6) {
+            setAlertBox({
+                isError: true,
+                message: "Password should be of atleast 6 characters"
+            });
+            return;
+        }
+
+        fetch(`${baseUrl}/api/auth/signup`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((res) => {
+                return res.json().then((data) => {
+                    return {
+                        status: res.status,
+                        data: data
+                    };
+                });
+            })
+            .then((data) => {
+                if (data.status !== 200) {
+                    setAlertBox({
+                        isError: true,
+                        message: data.data.message
+                    });
+                    return;
+                }
+                console.log(data);
+                setAlertBox({
+                    isError: false,
+                    message: "Verification email sent. Please verify your email."
+                });
+                // storeInLocalStorage("customer-token", data["key"]);
+                // navigate("/doctor");
+            });
+    };
 
     return (
         <div
@@ -35,39 +126,61 @@ export default function RegistrationCutomer() {
                 <div>
                     <div className="flex flex-col w-[20rem]">
                         <input
+                            onChange={(e) => {
+                                setFormData({ ...formData, username: e.target.value });
+                            }}
                             type="text"
                             placeholder="Enter your name"
                             className="border border-black outline-none p-2 rounded-md mb-4"
                         />
 
                         <input
+                            onChange={(e) => {
+                                setFormData({ ...formData, address: e.target.value });
+                            }}
                             type="text"
                             placeholder="Enter your address"
                             className="border border-black outline-none p-2 rounded-md mb-4"
                         />
 
                         <input
+                            onChange={(e) => {
+                                setFormData({ ...formData, phoneNumber: e.target.value });
+                            }}
                             type="text"
                             placeholder="Enter your phone number"
                             className="border border-black outline-none p-2 rounded-md mb-4"
                         />
 
                         <input
+                            onChange={(e) => {
+                                setFormData({ ...formData, email: e.target.value });
+                            }}
                             type="text"
                             placeholder="Enter your email"
                             className="border border-black outline-none p-2 rounded-md mb-4"
                         />
 
                         <input
+                            onChange={(e) => {
+                                setFormData({ ...formData, password: e.target.value });
+                            }}
                             type="password"
                             placeholder="Enter your password"
                             className="border border-black outline-none p-2 rounded-md mb-4"
                         />
 
+                        {/* warning div */}
+                        {
+                            alert.message && <div className={`text-center ${alert.isError ? "text-white" : "text-green-500"} text-sm ${alert.isError ? "bg-red-500" : "bg-lime-200"} me-2 rounded-md p-1`}>
+                                {alert.message}
+                            </div>
+                        }
+
                         <IconButton
                             icon={<FaArrowAltCircleRight />}
                             text="Register"
-                            callback={() => { }}
+                            callback={onSubmit}
                         />
                     </div>
                 </div>

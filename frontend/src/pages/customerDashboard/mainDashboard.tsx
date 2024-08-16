@@ -2,12 +2,24 @@ import Header from "../../components/header/Header";
 import NavigationBar from "../../components/navigationMenu/NavigationMenu";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { FaArrowAltCircleRight } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExploreSalons from "./ExploreSalons";
 import bg from '../../assets/logRegBG.svg';
+import { useNavigate } from "react-router-dom";
+import { removeFromLocalStorage } from "../../utils/localStorage";
 
 export default function MainDashboard() {
     const [pageIndex, setPageIndex] = useState(0);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        // logout
+        if (pageIndex == 3) {
+            removeFromLocalStorage("customer-token");
+            navigate("/");
+        }
+    }, [pageIndex]);
 
     return (
         <>

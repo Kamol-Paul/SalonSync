@@ -2,11 +2,86 @@ import Header from "../../components/header/Header";
 import IconButton from "../../components/iconButton/IconButton";
 import bg from '../../assets/logRegBG.svg'
 import customerReg from "../../assets/customerReg.svg";
-import { FaArrowAltCircleRight } from "react-icons/fa";
 import { RiLoginCircleLine } from "react-icons/ri";
-
+import { useState } from "react";
+import { baseUrl } from "../../utils/constants";
+import { storeInLocalStorage } from "../../utils/localStorage";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistrationPage() {
+    const navigate = useNavigate();
+
+    let [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    });
+
+    let [alert, setAlertBox] = useState({
+        isError: false,
+        message: ""
+    });
+
+    const onSubmit = () => {
+        console.log(formData);
+
+        setAlertBox({
+            isError: false,
+            message: "Please wait..."
+        });
+
+        // check if all fields are filled
+        if (
+            !formData.username ||
+            !formData.password
+        ) {
+            setAlertBox({
+                isError: true,
+                message: "All fields are required"
+            });
+            return;
+        }
+
+        if (formData.password.length < 6) {
+            setAlertBox({
+                isError: true,
+                message: "Password should be of atleast 6 characters"
+            });
+            return;
+        }
+
+        fetch(`${baseUrl}/api/auth/signin`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((res) => {
+                return res.json().then((data) => {
+                    return {
+                        status: res.status,
+                        data: data
+                    };
+                });
+            })
+            .then((data) => {
+                if (data.status !== 200) {
+                    setAlertBox({
+                        isError: true,
+                        message: "Invalid username or password"
+                    });
+                    return;
+                }
+                console.log(data);
+                setAlertBox({
+                    isError: false,
+                    message: "Verification email sent. Please verify your email."
+                });
+                storeInLocalStorage("customer-token", data.data.token);
+                navigate("/customer-dashboard");
+            });
+    };
+
 
     return (
         <div className="">
@@ -48,21 +123,33 @@ export default function RegistrationPage() {
                         <div className="flex">
                             <div className="flex flex-col w-[20rem] m-auto">
                                 <input
+                                    onChange={(e) => {
+                                        setFormData({ ...formData, username: e.target.value });
+                                    }}
                                     type="text"
-                                    placeholder="Enter your email / phone number"
+                                    placeholder="Enter your username"
                                     className="border border-black outline-none p-2 rounded-md mb-4"
                                 />
 
                                 <input
+                                    onChange={(e) => {
+                                        setFormData({ ...formData, password: e.target.value });
+                                    }}
                                     type="password"
                                     placeholder="Enter your password"
                                     className="border border-black outline-none p-2 rounded-md mb-4"
                                 />
 
+                                {
+                                    alert.message && <div className={`text-center ${alert.isError ? "text-white" : "text-green-500"} text-sm ${alert.isError ? "bg-red-500" : "bg-lime-200"} me-2 rounded-md p-1`}>
+                                        {alert.message}
+                                    </div>
+                                }
+
                                 <IconButton
                                     icon={<RiLoginCircleLine />}
                                     text="Login"
-                                    callback={() => { }}
+                                    callback={onSubmit}
                                 />
                             </div>
                         </div>
