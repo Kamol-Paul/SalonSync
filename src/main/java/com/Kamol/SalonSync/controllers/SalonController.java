@@ -71,6 +71,25 @@ public class SalonController {
     public ResponseEntity<?> getOne(@Param("id") String id){
         return salonHelper.getOneShop(id);
     }
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_SALON')")
+    public ResponseEntity<?> update(HttpServletRequest request, @RequestBody SalonUpdateRequest salonUpdateRequest){
+        User owner = jwtUtils.getUserFromRequest(request);
+        String id = owner.getId();
+        if(salonUpdateRequest.getName() != null){
+            salonHelper.updateName(id, salonUpdateRequest.getName());
+        }
+        if(salonUpdateRequest.getAddress() != null){
+            salonHelper.updateAddress(id, salonUpdateRequest.getAddress());
+        }
+        if(salonUpdateRequest.getImage() != null){
+            salonHelper.updateImage(id, salonUpdateRequest.getImage());
+        }
+        if(salonUpdateRequest.getServiceRequestSet() != null){
+            salonHelper.updatePriceList(id, salonUpdateRequest.getServiceRequestSet());
+        }
+        return ResponseEntity.ok("updated");
+    }
 
 
 }
