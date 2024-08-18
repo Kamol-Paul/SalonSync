@@ -2,6 +2,7 @@ import Header from "../../components/header/Header";
 import IconButton from "../../components/iconButton/IconButton";
 import bg from '../../assets/logRegBG.svg'
 import customerReg from "../../assets/customerReg.svg";
+import LoginImg from "../../assets/login.png";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { useState } from "react";
 import { baseUrl } from "../../utils/constants";
@@ -82,6 +83,8 @@ export default function RegistrationPage() {
                 let role = data.data.roles.length ? data.data.roles[0] : "ROLE_CUSTOMER";
                 storeInLocalStorage("role", role);
 
+                storeInLocalStorage("id", data.data?.id);
+
                 if (role === "ROLE_CUSTOMER") {
                     navigate("/customer-dashboard");
                     return;
@@ -132,7 +135,9 @@ export default function RegistrationPage() {
                         <div className="border border-black"></div>
 
                         <div className="flex">
-                            <div className="flex flex-col w-[20rem] m-auto">
+                            <div className="flex flex-col w-[20rem] mx-auto">
+                                <img src={LoginImg} alt="" className="w-44 mx-auto  relative top-[-1.5rem]" />
+
                                 <input
                                     onChange={(e) => {
                                         setFormData({ ...formData, username: e.target.value });

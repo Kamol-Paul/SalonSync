@@ -18,6 +18,7 @@ export function MainDashboard() {
         if (pageIndex == 3) {
             removeFromLocalStorage("token");
             removeFromLocalStorage("role");
+            removeFromLocalStorage("id");
             navigate("/");
         }
     }, [pageIndex]);

@@ -10,7 +10,7 @@ export default function ExploreSalons() {
         fetch(`${baseUrl}/api/salon/all`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
+                // console.log(data);
                 setSalons(data);
             });
     }, []);
