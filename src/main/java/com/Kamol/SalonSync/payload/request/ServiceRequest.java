@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class ServiceRequest {
     private String name;
-    private String cost;
+    private Long cost;
     private String image;
 }

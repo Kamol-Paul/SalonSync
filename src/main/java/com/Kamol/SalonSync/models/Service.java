@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Service {
     @Id private String id;
     private String name;
-    private String cost;
+    private Long cost;
     private String image;
 
 }

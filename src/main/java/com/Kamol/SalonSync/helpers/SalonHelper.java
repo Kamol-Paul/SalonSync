@@ -45,15 +45,22 @@ public class SalonHelper {
         if(list == null){
             list = new HashSet<>();
         }
+        double totalSum = 0;
+        totalSum = salon.getAverageServicesPrices() * salon.getServicesList().size();
         for(ServiceRequest entry: serviceRequestSet){
             com.Kamol.SalonSync.models.Service newService = new com.Kamol.SalonSync.models.Service();
             newService.setCost(entry.getCost());
+            totalSum += newService.getCost();
             newService.setName(entry.getName());
             newService.setImage(entry.getImage());
             newService = serviceRepository.save(newService);
             list.add(newService);
         }
+        if(totalSum > 0){
+            totalSum /= list.size();
+        }
         salon.setServicesList(list);
+        salon.setAverageServicesPrices(totalSum);
         salonRepository.save(salon);
     }
 

@@ -27,6 +27,7 @@ public class Salon {
     private String address;
     @DBRef
     private Set<Service> servicesList = new HashSet<>();
+    private double averageServicesPrices = 0;
     @DBRef
     private Set<Barber> barbers = new HashSet<>();
 }
