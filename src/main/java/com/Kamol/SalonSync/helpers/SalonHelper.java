@@ -61,7 +61,7 @@ public class SalonHelper {
         Salon salon = salonRepository.findById(id).get();
         Barber barber = new Barber();
         barber.setName(barberRequest.getName());
-        barber.setSkill(barber.getSkill());
+        barber.setSkill(barberRequest.getSkill());
         barber.setAvailability(barberRequest.getAvailability());
         barberRepository.save(barber);
         Set<Barber> list = salon.getBarbers();
