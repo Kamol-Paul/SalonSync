@@ -15,12 +15,14 @@ public class ShopResponse {
     private String name;
     private String address;
     private String image;
+    private double averageServicesPrices;
 
     public ShopResponse(Salon salon){
         this.id = salon.getId();
         this.name = salon.getName();
         this.address = salon.getAddress();
         this.image = salon.getImage();
+        this.averageServicesPrices = salon.getAverageServicesPrices();
     }
 
 }
