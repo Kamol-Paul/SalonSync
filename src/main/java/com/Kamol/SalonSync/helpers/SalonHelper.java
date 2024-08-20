@@ -45,23 +45,28 @@ public class SalonHelper {
         if(list == null){
             list = new HashSet<>();
         }
-        double totalSum = 0;
-        totalSum = salon.getAverageServicesPrices() * salon.getServicesList().size();
         for(ServiceRequest entry: serviceRequestSet){
             com.Kamol.SalonSync.models.Service newService = new com.Kamol.SalonSync.models.Service();
             newService.setCost(entry.getCost());
-            totalSum += newService.getCost();
             newService.setName(entry.getName());
             newService.setImage(entry.getImage());
             newService = serviceRepository.save(newService);
             list.add(newService);
         }
-        if(totalSum > 0){
-            totalSum /= list.size();
-        }
+
         salon.setServicesList(list);
-        salon.setAverageServicesPrices(totalSum);
+        salon.setAverageServicesPrices(getAverageValue(list));
         salonRepository.save(salon);
+    }
+
+    private double getAverageValue(Set<com.Kamol.SalonSync.models.Service> services){
+        double sum = 0;
+        double tot = services.size();
+        if(tot == 0) return 0;
+        for(com.Kamol.SalonSync.models.Service service: services){
+            sum += service.getCost();
+        }
+        return sum / tot;
     }
 
     public void addBarber(String id, BarberRequest barberRequest){
@@ -84,6 +89,7 @@ public class SalonHelper {
         List<Salon> allSalons = salonRepository.findAll();
         List<ShopResponse> shopResponseList = new ArrayList<>();
         for (Salon salon: allSalons){
+            salon.setAverageServicesPrices(getAverageValue(salon.getServicesList()));
             shopResponseList.add(new ShopResponse(salon));
         }
         return ResponseEntity.ok(shopResponseList);
