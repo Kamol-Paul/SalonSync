@@ -1,20 +1,13 @@
 package com.Kamol.SalonSync.payload.response;
 
-import com.Kamol.SalonSync.models.Appointment;
-import com.Kamol.SalonSync.repository.SalonRepository;
-import com.Kamol.SalonSync.repository.ServiceRepository;
-import com.Kamol.SalonSync.repository.UserRepository;
-import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
-@Service
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class AppointmentResponse {
     private String id;
     private String userId;
