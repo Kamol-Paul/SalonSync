@@ -3,6 +3,7 @@ package com.Kamol.SalonSync.controllers;
 import com.Kamol.SalonSync.models.Appointment;
 import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.payload.request.AppointmentRequest;
+import com.Kamol.SalonSync.payload.response.AppointmentResponse;
 import com.Kamol.SalonSync.repository.AppointmentRepository;
 import com.Kamol.SalonSync.security.jwt.JwtUtils;
 import com.Kamol.SalonSync.services.EmailService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,14 +47,18 @@ public class AppointmentController {
     public ResponseEntity<?> getAllAppointment(HttpServletRequest request){
         User user = jwtUtils.getUserFromRequest(request);
         List<Appointment> allAppointment = appointmentRepository.findAllBySalonId(user.getId());
-        return ResponseEntity.ok(allAppointment);
+        List<AppointmentResponse> responseList = new ArrayList<>();
+        for(Appointment appointment: allAppointment){
+            responseList.add(new AppointmentResponse(appointment));
+        }
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/one/{id}")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SALON')")
     public ResponseEntity<?> getOneAppointment(@Param("id") String  id){
         Appointment appointment = appointmentRepository.findById(id).get();
-        return ResponseEntity.ok(appointment);
+        return ResponseEntity.ok(new AppointmentResponse(appointment));
 
     }
 
