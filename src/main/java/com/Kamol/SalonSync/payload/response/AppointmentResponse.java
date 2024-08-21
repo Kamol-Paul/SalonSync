@@ -26,21 +26,5 @@ public class AppointmentResponse {
     private String serviceName;
     private String userName;
     private String salonName;
-    @Autowired
-    ServiceRepository serviceRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    SalonRepository salonRepository;
-    public AppointmentResponse(Appointment appointment){
-        this.id = appointment.getId();
-        this.userId = appointment.getUserId();
-        this.salonId = appointment.getSalonId();
-        this.barberId = appointment.getBarberId();
-        this.status = appointment.getStatus();
-        this.time = appointment.getTime();
-        this.serviceName = serviceRepository.findById(appointment.getServiceId()).get().getName();
-        this.userName = userRepository.findById(appointment.getUserId()).get().getUsername();
-        this.salonName = salonRepository.findById(appointment.getSalonId()).get().getName();
-    }
+
 }

@@ -1,5 +1,6 @@
 package com.Kamol.SalonSync.controllers;
 
+import com.Kamol.SalonSync.helpers.AppointmentHelper;
 import com.Kamol.SalonSync.models.Appointment;
 import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.payload.request.AppointmentRequest;
@@ -29,6 +30,8 @@ public class AppointmentController {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    AppointmentHelper appointmentHelper;
     @PostMapping("/new")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<?> addAppointment(HttpServletRequest request, @RequestBody AppointmentRequest appointmentRequest){
@@ -49,7 +52,7 @@ public class AppointmentController {
         List<Appointment> allAppointment = appointmentRepository.findAllBySalonId(user.getId());
         List<AppointmentResponse> responseList = new ArrayList<>();
         for(Appointment appointment: allAppointment){
-            responseList.add(new AppointmentResponse(appointment));
+            responseList.add(appointmentHelper.getAppointmentRespose(appointment));
         }
         return ResponseEntity.ok(responseList);
     }
@@ -58,7 +61,7 @@ public class AppointmentController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SALON')")
     public ResponseEntity<?> getOneAppointment(@Param("id") String  id){
         Appointment appointment = appointmentRepository.findById(id).get();
-        return ResponseEntity.ok(new AppointmentResponse(appointment));
+        return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
 
     }
 
@@ -72,7 +75,7 @@ public class AppointmentController {
             appointment.setTime(new Date());
             appointmentRepository.save(appointment);
         }
-        return ResponseEntity.ok(new AppointmentResponse(appointment));
+        return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
 
     }
 
@@ -90,7 +93,7 @@ public class AppointmentController {
 
 
         }
-        return ResponseEntity.ok(new AppointmentResponse(appointment));
+        return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
 
     }
 
