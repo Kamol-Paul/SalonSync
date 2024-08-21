@@ -9,10 +9,11 @@ import { pad } from "../../utils/utils";
 import IconButton from "../../components/iconButton/IconButton";
 import { hairstyles, otherServices } from "../../utils/constants";
 import { FaCheckCircle } from "react-icons/fa";
-
+import { useDispatch } from 'react-redux';
+import ModalContent from "./modalContent";
 
 export default function ExploreSalons() {
-
+    const dispatch = useDispatch();
     const [salons, setSalons] = useState([]);
     const allServices = hairstyles.concat(otherServices);
 
@@ -166,7 +167,12 @@ export default function ExploreSalons() {
                                         icon={<FaCheckCircle />}
                                         text="Set an Appointment"
                                         callback={() => {
-
+                                            dispatch({
+                                                type: 'SHOW_MODAL', payload: {
+                                                    title: "Set an Appointment",
+                                                    body: <ModalContent salon={salon} />,
+                                                }
+                                            });
                                         }}
                                     />
                                     <IconButton
@@ -203,7 +209,6 @@ export default function ExploreSalons() {
                                             <span className="text-xs mt-1">
                                                 Service Price: ৳{service?.cost} Taka
                                             </span>
-                                            {/* <IconButton direction="right" icon={<FaSearch />} text="Visit" callback={callback} /> */}
                                         </div>
                                     )
                                 }
@@ -246,84 +251,8 @@ export default function ExploreSalons() {
                                 }
                             </div>
                         </div>
-
                     </>
             }
         </div>
     );
 }
-// {
-//     "id": "66bf5b5d7ee4590e0f2a89fd",
-//     "owner": {
-//       "id": "66bf5b5d7ee4590e0f2a89fd",
-//       "username": "tanimsk_salon",
-//       "email": "sktanim5800+salon@gmail.com",
-//       "password": null,
-//       "phoneNumber": "11760001377",
-//       "address": null,
-//       "enable": true,
-//       "verificationCode": null,
-//       "resetPasswordToken": null,
-//       "roles": [
-//         {
-//           "id": "66bceaa90da3dc633c82042e",
-//           "name": "ROLE_SALON"
-//         }
-//       ]
-//     },
-//     "image": "https://i.ibb.co/vBf06qq/cff65c9a3139.jpg",
-//     "name": "My Tanim Salon",
-//     "address": "Rajshahi",
-//     "servicesList": [
-//       {
-//         "id": "66c3a991485b974dbca15379",
-//         "name": "Special Service",
-//         "cost": 230,
-//         "image": null
-//       },
-//       {
-//         "id": "66c3a992485b974dbca1537a",
-//         "name": "Side-Sweep Edge",
-//         "cost": 120,
-//         "image": null
-//       },
-//       {
-//         "id": "66c3a992485b974dbca1537b",
-//         "name": "Spa Service",
-//         "cost": 200,
-//         "image": null
-//       },
-//       {
-//         "id": "66c3a992485b974dbca1537c",
-//         "name": "Skin Care",
-//         "cost": 100,
-//         "image": null
-//       }
-//     ],
-//     "averageServicesPrices": 0,
-//     "barbers": [
-//       {
-//         "id": "66c37fa9dffff84d3069c9df",
-//         "name": "Tanim",
-//         "skill": null,
-//         "availability": [
-//           "Wednesday",
-//           "Tuesday"
-//         ]
-//       },
-//       {
-//         "id": "66c38f0b485b974dbca15378",
-//         "name": "Tanim Sk Barber",
-//         "skill": "Intermediate",
-//         "availability": [
-//           "Monday",
-//           "Thursday",
-//           "Friday",
-//           "Sunday",
-//           "Wednesday",
-//           "Tuesday",
-//           "Saturday"
-//         ]
-//       }
-//     ]
-//   }

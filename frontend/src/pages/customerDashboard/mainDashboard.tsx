@@ -13,7 +13,6 @@ export function MainDashboard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         // logout
         if (pageIndex == 3) {
             removeFromLocalStorage("token");
@@ -67,9 +66,8 @@ export function MainDashboard() {
                             }
                         </div>
                     </div>
-
                 </div>
-            </div >
+            </div>
         </>
 
     );

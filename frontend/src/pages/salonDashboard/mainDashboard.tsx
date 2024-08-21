@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { removeFromLocalStorage } from "../../utils/localStorage";
 import SalonInfo from "./salonInfo";
 import BarberInfo from "./barberInfo";
+import SalonAppointments from "./appointments";
 
 export function MainDashboard() {
     const [pageIndex, setPageIndex] = useState(0);
@@ -64,7 +65,10 @@ export function MainDashboard() {
                                 pageIndex == 0 ?
                                     <SalonInfo /> :
                                     pageIndex == 1 ?
-                                        <BarberInfo /> : <></>
+                                        <BarberInfo /> :
+                                        pageIndex == 2 ?
+                                            <SalonAppointments /> :
+                                            <></>
                             }
                         </div>
                     </div>
