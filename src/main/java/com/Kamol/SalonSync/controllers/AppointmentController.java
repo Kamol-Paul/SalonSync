@@ -72,7 +72,7 @@ public class AppointmentController {
             appointment.setTime(new Date());
             appointmentRepository.save(appointment);
         }
-        return ResponseEntity.ok(appointment);
+        return ResponseEntity.ok(new AppointmentResponse(appointment));
 
     }
 
@@ -90,7 +90,7 @@ public class AppointmentController {
 
 
         }
-        return ResponseEntity.ok(appointment);
+        return ResponseEntity.ok(new AppointmentResponse(appointment));
 
     }
 

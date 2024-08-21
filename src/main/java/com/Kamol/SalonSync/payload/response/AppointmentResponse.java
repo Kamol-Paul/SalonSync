@@ -6,8 +6,10 @@ import com.Kamol.SalonSync.repository.ServiceRepository;
 import com.Kamol.SalonSync.repository.UserRepository;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
+@Service
 @Getter
 @Setter
 @NoArgsConstructor
