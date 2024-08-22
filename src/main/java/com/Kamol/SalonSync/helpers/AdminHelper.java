@@ -1,9 +1,7 @@
 package com.Kamol.SalonSync.helpers;
 
-import com.Kamol.SalonSync.models.ERole;
-import com.Kamol.SalonSync.models.Role;
-import com.Kamol.SalonSync.models.SubscriptionFee;
-import com.Kamol.SalonSync.models.User;
+import com.Kamol.SalonSync.models.*;
+import com.Kamol.SalonSync.repository.SalonRepository;
 import com.Kamol.SalonSync.repository.SubscriptionFeeRepository;
 import com.Kamol.SalonSync.repository.UserRepository;
 import com.Kamol.SalonSync.security.jwt.JwtUtils;
@@ -21,6 +19,8 @@ public class AdminHelper {
     UserRepository userRepository;
     @Autowired
     SubscriptionFeeRepository subscriptionFeeRepository;
+    @Autowired
+    SalonRepository salonRepository;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -57,6 +57,7 @@ public class AdminHelper {
         HashMap<String, SubscriptionFee> latestFee = new HashMap<>();
         List<SubscriptionFee> allSubscriptionFee = getAllSubscriptionFee();
 
+
         for(SubscriptionFee subscriptionFee: allSubscriptionFee){
             if(!latestFee.containsKey(subscriptionFee.getSalonId())){
                latestFee.put(subscriptionFee.getSalonId(), subscriptionFee);
@@ -64,6 +65,12 @@ public class AdminHelper {
                 if(latestFee.get(subscriptionFee.getSalonId()).getTime().before(subscriptionFee.getTime())){
                     latestFee.put(subscriptionFee.getSalonId(),subscriptionFee);
                 }
+            }
+        }
+        List<Salon> allSalon = salonRepository.findAll();
+        for(Salon salon: allSalon){
+            if(!latestFee.containsKey(salon.getId())){
+                latestFee.put(salon.getId(), null);
             }
         }
         return latestFee;
