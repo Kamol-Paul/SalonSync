@@ -7,7 +7,7 @@ import { GiConfirmed } from "react-icons/gi";
 import { RxCrossCircled } from "react-icons/rx";
 
 
-export default function AppointmentModal({ id }: { id: string }) {
+export default function AppointmentModal({ id, setAppointments }: { id: string, setAppointments: any }) {
     let [appointment, setAppointment] = useState<any>({});
     let [barbers, setBarbers] = useState<any>([]);
     let [appointmentPayload, setAppointmentPayload] = useState<any>({
@@ -21,6 +21,27 @@ export default function AppointmentModal({ id }: { id: string }) {
         isError: false,
         message: ""
     });
+
+    const fetchAppointment = (all: boolean = false) => {
+        let url = all ? `${baseUrl}/api/appointment/all` : `${baseUrl}/api/appointment/one/{id}?id=${id}`;
+        fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${loadFromLocalStorage("token")}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                if (all) {
+                    setAppointments(data);
+                    return;
+                }
+                setAppointment(data);
+            });
+    }
+
 
 
     useEffect(() => {
@@ -37,19 +58,40 @@ export default function AppointmentModal({ id }: { id: string }) {
                 setBarbers(data?.barbers);
             });
 
-        fetch(`${baseUrl}/api/appointment/one/{id}?id=${id}`, {
-            method: "GET",
+        fetchAppointment(false);
+    }, []);
+
+    const rejectAppointment = () => {
+        fetch(`${baseUrl}/api/appointment/reject/{id}?id=${id}`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${loadFromLocalStorage("token")}`,
             },
         })
-            .then((res) => res.json())
+            .then((res) => {
+                return res.json().then((data) => {
+                    return {
+                        status: res.status,
+                        data: data
+                    };
+                });
+            })
             .then((data) => {
-                console.log(data);
-                setAppointment(data);
+                if (data.status !== 200) {
+                    setAlertBox({
+                        isError: true,
+                        message: "Something went wrong"
+                    });
+                    return;
+                }
+                setAlertBox({
+                    isError: false,
+                    message: "Appointment rejected"
+                });
+                fetchAppointment(true);
             });
-    }, []);
+    }
 
     const confirmAppointment = () => {
         // validation
@@ -68,7 +110,7 @@ export default function AppointmentModal({ id }: { id: string }) {
             return;
         }
 
-        fetch(`${baseUrl}/api/appointment/confirm/{id}?id=${loadFromLocalStorage("id")}`, {
+        fetch(`${baseUrl}/api/appointment/confirm/{id}?id=${id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -96,6 +138,7 @@ export default function AppointmentModal({ id }: { id: string }) {
                     isError: false,
                     message: "Appointment confirmed"
                 });
+                fetchAppointment(true);
             });
     }
 
@@ -173,8 +216,7 @@ export default function AppointmentModal({ id }: { id: string }) {
                     className="bg-red-500 hover:bg-red-700 focus:ring-red-300"
                     icon={<RxCrossCircled className="font-bold text-[1.4rem] ml-1" />}
                     text="Reject"
-                    callback={() => {
-                    }}
+                    callback={rejectAppointment}
                     direction="left"
                 />
             </div>

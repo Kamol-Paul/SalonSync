@@ -58,6 +58,16 @@ export default function RegistrationPage() {
             body: JSON.stringify(formData),
         })
             .then((res) => {
+                if (res.status === 400) {
+                    res.text().then((errorMessage) => {
+                        setAlertBox({
+                            isError: true,
+                            message: errorMessage
+                        });
+                    });
+                    return;
+                }
+
                 return res.json().then((data) => {
                     return {
                         status: res.status,
@@ -66,7 +76,7 @@ export default function RegistrationPage() {
                 });
             })
             .then((data) => {
-                if (data.status !== 200) {
+                if (data && data.status !== 200) {
                     setAlertBox({
                         isError: true,
                         message: "Invalid username or password"
@@ -78,24 +88,26 @@ export default function RegistrationPage() {
                     isError: false,
                     message: "Redirecting..."
                 });
-                storeInLocalStorage("token", data.data.token);
+                if (data && data.data) {
+                    storeInLocalStorage("token", data.data.token);
 
-                let role = data.data.roles.length ? data.data.roles[0] : "ROLE_CUSTOMER";
-                storeInLocalStorage("role", role);
+                    let role = data.data.roles.length ? data.data.roles[0] : "ROLE_CUSTOMER";
+                    storeInLocalStorage("role", role);
 
-                storeInLocalStorage("id", data.data?.id);
+                    storeInLocalStorage("id", data.data?.id);
 
-                if (role === "ROLE_CUSTOMER") {
-                    navigate("/customer-dashboard");
-                    return;
-                }
-                else if (role === "ROLE_SALON") {
-                    navigate("/salon-dashboard");
-                    return;
-                }
-                else if (role === "ROLE_ADMIN") {
-                    navigate("/admin-dashboard");
-                    return;
+                    if (role === "ROLE_CUSTOMER") {
+                        navigate("/customer-dashboard");
+                        return;
+                    }
+                    else if (role === "ROLE_SALON") {
+                        navigate("/salon-dashboard");
+                        return;
+                    }
+                    else if (role === "ROLE_ADMIN") {
+                        navigate("/admin-dashboard");
+                        return;
+                    }
                 }
             });
     };

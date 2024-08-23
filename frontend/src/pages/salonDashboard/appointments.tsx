@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 
 export default function SalonAppointments() {
     let [appointments, setAppointments] = useState<any[]>([]);
+    let [filter, setFilter] = useState<string>("new-posted");
     let dispatch = useDispatch();
 
     useEffect(() => {
@@ -21,10 +22,16 @@ export default function SalonAppointments() {
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                setAppointments(data);
+                let filteredData: any[] = [];
+                data.map((appointment: any) => {
+                    if (appointment.status === filter) {
+                        filteredData.push(appointment);
+                    }
+                })
+                setAppointments(filteredData);
             });
 
-    }, []);
+    }, [filter]);
 
     return (
         <div>
@@ -43,11 +50,43 @@ export default function SalonAppointments() {
                     <div className="rounded-t mb-0 px-4 py-3 border-0">
                         <div className="flex flex-wrap items-center">
                             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                                <h3 className="font-semibold text-base text-blueGray-700">
+                                <h3 className="font-semibold text-base text-gray-600">
                                     Recent Appointments
                                 </h3>
                             </div>
+                            <div className="relative w-full px-2 max-w-full flex-grow flex-1 space-x-0 text-right">
+                                <div className="flex flex-row space-x-2">
+                                    <IconButton
+                                        className="scale-75 mt-0 border-none"
+                                        icon={""}
+                                        text="Requested"
+                                        callback={() => {
+                                            setFilter("new-posted");
+                                        }}
+                                        direction="right"
+                                    />
+                                    <IconButton
+                                        className="scale-75 mt-0 border-none"
+                                        icon={""}
+                                        text="Approved"
+                                        callback={() => {
+                                            setFilter("accept-waiting-for-call");
+                                        }}
+                                        direction="right"
+                                    />
+                                    <IconButton
+                                        className="scale-75 mt-0 border-none"
+                                        icon={""}
+                                        text="Rejected"
+                                        callback={() => {
+                                            setFilter("rejected");
+                                        }}
+                                        direction="right"
+                                    />
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <div className="block w-full overflow-x-auto">
                         <table className="items-center bg-transparent w-full border-collapse ">
@@ -81,22 +120,25 @@ export default function SalonAppointments() {
                                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
                                                 {appointment?.status}
                                             </td>
+                                            {
+                                                filter === "new-posted" &&
+                                                <IconButton
+                                                    className="scale-75 mt-[0.3rem]"
+                                                    icon={""}
+                                                    text="View"
+                                                    callback={() => {
+                                                        dispatch({
+                                                            type: 'SHOW_MODAL', payload: {
+                                                                title: "Appointment Details",
+                                                                body: <AppointmentModal id={appointment.id} setAppointments={setAppointments} />,
+                                                            }
+                                                        });
 
-                                            <IconButton
-                                                className="scale-75 mt-[0.4rem]"
-                                                icon={""}
-                                                text="View"
-                                                callback={() => {
-                                                    dispatch({
-                                                        type: 'SHOW_MODAL', payload: {
-                                                            title: "Appointment Details",
-                                                            body: <AppointmentModal id={appointment.id} />,
-                                                        }
-                                                    });
+                                                    }}
+                                                    direction="right"
+                                                />
+                                            }
 
-                                                }}
-                                                direction="right"
-                                            />
                                         </tr>
                                     ))
                                 }
