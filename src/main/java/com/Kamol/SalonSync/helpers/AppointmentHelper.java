@@ -1,6 +1,8 @@
 package com.Kamol.SalonSync.helpers;
 
 import com.Kamol.SalonSync.models.Appointment;
+import com.Kamol.SalonSync.models.Salon;
+import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.payload.response.AppointmentResponse;
 import com.Kamol.SalonSync.repository.SalonRepository;
 import com.Kamol.SalonSync.repository.ServiceRepository;
@@ -25,9 +27,13 @@ public class AppointmentHelper {
         appointmentResponse.setBarberId(appointment.getBarberId());
         appointmentResponse.setStatus(appointment.getStatus());
         appointmentResponse.setTime(appointment.getTime());
-        appointmentResponse.setUserName(userRepository.findById(appointment.getUserId()).get().getUsername());
+        User user = userRepository.findById(appointment.getUserId()).get();
+        Salon salon = salonRepository.findById(appointment.getSalonId()).get();
+        appointmentResponse.setUserName(user.getUsername());
         appointmentResponse.setServiceName(serviceRepository.findById(appointment.getServiceId()).get().getName());
-        appointmentResponse.setSalonName(salonRepository.findById(appointment.getSalonId()).get().getName());
+        appointmentResponse.setSalonName(salon.getName());
+        appointmentResponse.setUserAddress(user.getAddress());
+        appointmentResponse.setUserContact(user.getPhoneNumber());
         return appointmentResponse;
     }
     public void sendMessage(String phoneNumber){

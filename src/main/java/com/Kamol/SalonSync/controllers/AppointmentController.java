@@ -4,6 +4,7 @@ import com.Kamol.SalonSync.helpers.AppointmentHelper;
 import com.Kamol.SalonSync.models.Appointment;
 import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.payload.request.AppointmentRequest;
+import com.Kamol.SalonSync.payload.request.AppointmentRequestAcceptance;
 import com.Kamol.SalonSync.payload.response.AppointmentResponse;
 import com.Kamol.SalonSync.repository.AppointmentRepository;
 import com.Kamol.SalonSync.security.jwt.JwtUtils;
@@ -65,18 +66,31 @@ public class AppointmentController {
 
     }
 
-    @GetMapping("/confirm/{id}")
+    @PostMapping("/confirm/{id}")
     @PreAuthorize("hasRole('ROLE_SALON')")
-    public ResponseEntity<?> confirmAppointment(@Param("id") String  id, HttpServletRequest request){
+    public ResponseEntity<?> confirmAppointment(@Param("id") String  id, HttpServletRequest request, @RequestBody AppointmentRequestAcceptance appointmentRequestAcceptance){
         Appointment appointment = appointmentRepository.findById(id).get();
         User user = jwtUtils.getUserFromRequest(request);
         if(user.getId().equals(appointment.getSalonId())){
-            appointment.setStatus("waiting-for-call");
-            appointment.setTime(new Date());
+            appointment.setStatus("accept-waiting-for-call");
+            appointment.setTime(appointmentRequestAcceptance.getDate());
+            appointment.setBarberId(appointmentRequestAcceptance.getBarberId());
             appointmentRepository.save(appointment);
         }
         return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
 
+    }
+    @PostMapping("/reject/{id}")
+    @PreAuthorize("hasRole('ROLE_SALON')")
+    public ResponseEntity<?> rejectAppointment(@Param("id") String id, HttpServletRequest request){
+        User user = jwtUtils.getUserFromRequest(request);
+        Appointment appointment = appointmentRepository.findById(id).get();
+        if(user.getId().equals(appointment.getSalonId())){
+            appointment.setStatus("rejected");
+            appointment.setTime(new Date());
+            appointmentRepository.save(appointment);
+        }
+        return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
     }
 
     @GetMapping("/call/{id}")

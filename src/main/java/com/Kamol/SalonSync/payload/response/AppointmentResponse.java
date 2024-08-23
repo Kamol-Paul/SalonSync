@@ -18,6 +18,8 @@ public class AppointmentResponse {
     private Date time;
     private String serviceName;
     private String userName;
+    private String userAddress;
+    private String userContact;
     private String salonName;
 
 }

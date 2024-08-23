@@ -12,4 +12,5 @@ import lombok.ToString;
 public class AppointmentRequest {
     private String salonId;
     private String serviceId;
+
 }
