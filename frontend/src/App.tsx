@@ -4,6 +4,7 @@ import RegistrationPage from './pages/registrationPage/RegistrationPage.tsx';
 import LoginPage from './pages/loginPage/LoginPage.tsx';
 import { MainDashboard as CustomerDashboard } from './pages/customerDashboard/mainDashboard.tsx';
 import { MainDashboard as SalonDashboard } from './pages/salonDashboard/mainDashboard.tsx';
+import { MainDashboard as AdminDashboard } from './pages/adminDashboard/mainDashboard.tsx';
 
 export const routes = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -11,6 +12,7 @@ export const routes = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
   { path: '/customer-dashboard', element: <CustomerDashboard /> },
   { path: '/salon-dashboard', element: <SalonDashboard /> },
+  { path: '/admin-dashboard', element: <AdminDashboard /> },
 ]);
 
 

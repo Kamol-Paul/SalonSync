@@ -93,6 +93,10 @@ export default function RegistrationPage() {
                     navigate("/salon-dashboard");
                     return;
                 }
+                else if (role === "ROLE_ADMIN") {
+                    navigate("/admin-dashboard");
+                    return;
+                }
             });
     };
 
