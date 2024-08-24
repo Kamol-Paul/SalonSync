@@ -93,22 +93,22 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
     }
 
-    @GetMapping("/call/{id}")
-    @PreAuthorize("hasRole('ROLE_SALON')")
-    public ResponseEntity<?> callAppointment(@Param("id") String  id, HttpServletRequest request){
-        Appointment appointment = appointmentRepository.findById(id).get();
-        User user = jwtUtils.getUserFromRequest(request);
-        if(user.getId().equals(appointment.getSalonId())){
-            appointment.setStatus("called");
-            // mail and message function will be implimented
-            appointment.setTime(new Date());
-            appointmentRepository.save(appointment);
-            emailService.sendCalledMail(appointment);
-
-
-        }
-        return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
-
-    }
+//    @GetMapping("/call/{id}")
+//    @PreAuthorize("hasRole('ROLE_SALON')")
+//    public ResponseEntity<?> callAppointment(@Param("id") String  id, HttpServletRequest request){
+//        Appointment appointment = appointmentRepository.findById(id).get();
+//        User user = jwtUtils.getUserFromRequest(request);
+//        if(user.getId().equals(appointment.getSalonId())){
+//            appointment.setStatus("called");
+//            // mail and message function will be implimented
+//            appointment.setTime(new Date());
+//            appointmentRepository.save(appointment);
+//            emailService.sendCalledMail(appointment);
+//
+//
+//        }
+//        return ResponseEntity.ok(appointmentHelper.getAppointmentRespose(appointment));
+//
+//    }
 
 }

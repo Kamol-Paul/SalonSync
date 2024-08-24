@@ -94,6 +94,7 @@ public class SalonController {
         }
         return ResponseEntity.ok("updated");
     }
+
     @GetMapping("/get_review")
     @PreAuthorize("hasRole('ROLE_SALON')")
     public  ResponseEntity<?> getAllReview(HttpServletRequest request){
