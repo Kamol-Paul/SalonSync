@@ -1,6 +1,7 @@
 package com.Kamol.SalonSync.controllers;
 
 
+import com.Kamol.SalonSync.helpers.CustomerHelper;
 import com.Kamol.SalonSync.helpers.SalonHelper;
 import com.Kamol.SalonSync.models.User;
 import com.Kamol.SalonSync.payload.request.BarberRequest;
@@ -21,6 +22,9 @@ public class SalonController {
     JwtUtils jwtUtils;
     @Autowired
     SalonHelper salonHelper;
+
+    @Autowired
+    CustomerHelper customerHelper;
 
     @PutMapping("/update_image")
     @PreAuthorize("hasRole('ROLE_SALON')")
@@ -89,6 +93,11 @@ public class SalonController {
             salonHelper.updatePriceList(id, salonUpdateRequest.getServiceRequestSet());
         }
         return ResponseEntity.ok("updated");
+    }
+    @GetMapping("/get_review")
+    @PreAuthorize("hasRole('ROLE_SALON')")
+    public  ResponseEntity<?> getAllReview(HttpServletRequest request){
+        return ResponseEntity.ok(customerHelper.getAllSalonResponse(request));
     }
 
 
