@@ -32,8 +32,10 @@ public class AdminHelper {
         List<User> allUser = userRepository.findAll();
         ERole customer = ERole.ROLE_CUSTOMER;
         List<User> forReturn = new ArrayList<>();
+
        for(User user: allUser){
             for(Role role: user.getRoles()){
+                System.out.println(customer + " " + role.getName());
                 if(role.getName().equals(customer)){
                     user.setPassword(null);
                     forReturn.add(user);
