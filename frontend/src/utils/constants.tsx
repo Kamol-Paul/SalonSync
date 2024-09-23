@@ -10,9 +10,8 @@ import img9 from "../assets/skinCare.jpg";
 import img10 from "../assets/spaService.jpg";
 import img11 from "../assets/specialService.jpg";
 
-
-
-export const baseUrl = 'http://localhost:8080';
+// export const baseUrl = 'http://localhost:8080';
+export const baseUrl = 'https://test-23asd1skwwex.miahtrip.com/';
 
 export const hairstyles = [
     {
