@@ -4,6 +4,7 @@ import com.Kamol.SalonSync.helpers.CustomerHelper;
 import com.Kamol.SalonSync.payload.request.ReviewRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,11 @@ public class CustomerController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<?> getReview(HttpServletRequest request){
         return ResponseEntity.ok(customerHelper.getCustomerReview(request));
+    }
+    @GetMapping("/get_review/{id}")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    public ResponseEntity<?> getReviewWithSalonID(@Param("id") String id,  HttpServletRequest request){
+        return ResponseEntity.ok(customerHelper.getCustomerReviewWithSalonId(request,id));
     }
 
 }

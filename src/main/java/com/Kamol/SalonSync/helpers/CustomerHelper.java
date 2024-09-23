@@ -48,6 +48,16 @@ public class CustomerHelper {
         }
         return allReviewResponse;
     }
+    public List<ReviewResponse> getCustomerReviewWithSalonId(HttpServletRequest request, String salonId){
+        User customer = jwtUtils.getUserFromRequest(request);
+        List<Review> allCustomerReview = reviewRepository.findAllByCustomerId(customer.getId());
+        List<ReviewResponse> allReviewResponse = new ArrayList<>();
+        for(Review review: allCustomerReview){
+            if(review.getSalonId().equals(salonId))
+                allReviewResponse.add(getReviewResponse(review));
+        }
+        return allReviewResponse;
+    }
 
     ReviewResponse getReviewResponse(Review review){
         ReviewResponse reviewResponse = new ReviewResponse();
