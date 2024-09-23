@@ -1,6 +1,7 @@
 package com.Kamol.SalonSync.helpers;
 
 import com.Kamol.SalonSync.models.*;
+import com.Kamol.SalonSync.repository.AppointmentRepository;
 import com.Kamol.SalonSync.repository.SalonRepository;
 import com.Kamol.SalonSync.repository.SubscriptionFeeRepository;
 import com.Kamol.SalonSync.repository.UserRepository;
@@ -21,6 +22,9 @@ public class AdminHelper {
     SubscriptionFeeRepository subscriptionFeeRepository;
     @Autowired
     SalonRepository salonRepository;
+
+    @Autowired
+    AppointmentRepository appointmentRepository;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -76,5 +80,17 @@ public class AdminHelper {
         return latestFee;
 
     }
+
+    public int getAllAppointment(Date from, Date to){
+        List<Appointment> appointments = appointmentRepository.findAll();
+        int ans = 0;
+        for(Appointment appointment : appointments){
+            if(appointment.getTime().before(to) && appointment.getTime().after(from)){
+                ans++;
+            }
+        }
+        return ans;
+    }
+
 }
 

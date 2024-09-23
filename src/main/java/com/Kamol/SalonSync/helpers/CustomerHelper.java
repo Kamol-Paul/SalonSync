@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class CustomerHelper {
         for(Review review: allCustomerReview){
             allReviewResponse.add(getReviewResponse(review));
         }
+        Collections.reverse(allReviewResponse);
         return allReviewResponse;
     }
     public List<ReviewResponse> getCustomerReviewWithSalonId(HttpServletRequest request, String salonId){
@@ -53,9 +55,11 @@ public class CustomerHelper {
         List<Review> allCustomerReview = reviewRepository.findAllByCustomerId(customer.getId());
         List<ReviewResponse> allReviewResponse = new ArrayList<>();
         for(Review review: allCustomerReview){
-            if(review.getSalonId().equals(salonId))
+            if(review.getSalonId().equals(salonId)) {
                 allReviewResponse.add(getReviewResponse(review));
+            }
         }
+        Collections.reverse(allReviewResponse);
         return allReviewResponse;
     }
 
