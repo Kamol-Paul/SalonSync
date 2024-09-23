@@ -67,6 +67,7 @@ public class CustomerHelper {
 
     public  List<ReviewResponse> getAllSalonResponse(HttpServletRequest request){
         User salon = jwtUtils.getUserFromRequest(request);
+        System.out.println(salon);
         List<Review> allSalonReview = reviewRepository.findAllBySalonId(salon.getId());
         List<ReviewResponse> allReviewResponse = new ArrayList<>();
         for(Review review: allSalonReview){
