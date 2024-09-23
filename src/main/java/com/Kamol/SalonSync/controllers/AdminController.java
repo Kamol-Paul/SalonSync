@@ -38,12 +38,12 @@ public class AdminController {
         return ResponseEntity.ok(adminHelper.givePayment(request));
     }
 
-    @GetMapping("gat_all_subscription_fee")
+    @GetMapping("get_all_subscription_fee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getAllSubscriptionFee(){
         return ResponseEntity.ok(adminHelper.getAllSubscriptionFee());
     }
-    @GetMapping("gat_latest_subscription_fee")
+    @GetMapping("get_latest_subscription_fee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getLatestSubscriptionFee(){
         return ResponseEntity.ok(adminHelper.getLatestSubscriptionFee());

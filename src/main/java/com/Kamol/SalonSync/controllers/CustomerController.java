@@ -19,7 +19,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerHelper.postNewReview(reviewRequest));
     }
 
-    @GetMapping("/get_reveiw")
+    @GetMapping("/get_review")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<?> getReview(HttpServletRequest request){
         return ResponseEntity.ok(customerHelper.getCustomerReview(request));
