@@ -21,5 +21,7 @@ public class AppointmentResponse {
     private String userAddress;
     private String userContact;
     private String salonName;
+    private Double longitude;
+    private Double latitude;
 
 }

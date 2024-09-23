@@ -41,6 +41,8 @@ public class AppointmentController {
         newAppointment.setUserId(user.getId());
         newAppointment.setSalonId(appointmentRequest.getSalonId());
         newAppointment.setServiceId(appointmentRequest.getServiceId());
+        newAppointment.setLatitude(appointmentRequest.getLatitude());
+        newAppointment.setLongitude(appointmentRequest.getLongitude());
         newAppointment.setStatus("new-posted");
         newAppointment = (Appointment) appointmentRepository.save(newAppointment);
         return ResponseEntity.ok(newAppointment);

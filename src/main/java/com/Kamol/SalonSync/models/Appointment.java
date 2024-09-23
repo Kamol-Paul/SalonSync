@@ -22,5 +22,7 @@ public class Appointment {
     private String barberId;
     private String status;
     private Date time;
+    private Double longitude;
+    private Double latitude;
 
 }

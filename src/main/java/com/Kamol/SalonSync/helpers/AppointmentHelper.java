@@ -45,6 +45,8 @@ public class AppointmentHelper {
         appointmentResponse.setSalonName(salon.getName());
         appointmentResponse.setUserAddress(user.getAddress());
         appointmentResponse.setUserContact(user.getPhoneNumber());
+        appointmentResponse.setLongitude(appointment.getLongitude());
+        appointmentResponse.setLatitude(appointment.getLatitude());
         return appointmentResponse;
     }
     public void sendMessage(String phoneNumber){
