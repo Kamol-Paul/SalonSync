@@ -35,6 +35,7 @@ public class CustomerHelper {
         review.setReviewText(reviewRequest.getReviewText());
         review.setDate(new Date());
         review = reviewRepository.save(review);
+        System.out.println(review);
         return review;
 
     }
