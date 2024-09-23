@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import bg from '../../assets/logRegBG.svg';
 import { useNavigate } from "react-router-dom";
 import { removeFromLocalStorage } from "../../utils/localStorage";
-// import SalonInfo from "./salonInfo";
-// import BarberInfo from "./barberInfo";
-// import SalonAppointments from "./appointments";
+import ManageSalons from "./manageSalons";
+import ManageCustomer from "./manageCustomer";
+import { BsShop } from "react-icons/bs";
+import { IoPeopleCircleOutline } from "react-icons/io5";
+
 
 export function MainDashboard() {
     const [pageIndex, setPageIndex] = useState(0);
@@ -34,11 +36,11 @@ export function MainDashboard() {
                         navMenuContents={[
                             {
                                 title: "Manage Salons",
-                                icon: <FaArrowAltCircleRight className="w-6 h-6" />,
+                                icon: <BsShop className="w-6 h-6" />,
                             },
                             {
                                 title: "Manage Customers",
-                                icon: <RiLoginCircleLine className="w-6 h-6" />,
+                                icon: <IoPeopleCircleOutline className="w-6 h-6" />,
                             },
                             {
                                 title: "Appointments",
@@ -62,13 +64,13 @@ export function MainDashboard() {
                             backgroundColor: "#aac1ff21"
                         }}>
                             {
-                                // pageIndex == 0 ?
-                                //     <SalonInfo /> :
-                                //     pageIndex == 1 ?
-                                //         <BarberInfo /> :
-                                //         pageIndex == 2 ?
-                                //             <SalonAppointments /> :
-                                //             <></>
+                                pageIndex == 0 ?
+                                    <ManageSalons /> :
+                                    pageIndex == 1 ?
+                                        <ManageCustomer /> :
+                                        // pageIndex == 2 ?
+                                        //     <SalonAppointments /> :
+                                        <></>
                             }
                         </div>
                     </div>

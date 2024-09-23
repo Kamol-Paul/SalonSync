@@ -7,7 +7,7 @@ import { GiConfirmed } from "react-icons/gi";
 import { RxCrossCircled } from "react-icons/rx";
 
 
-export default function AppointmentModal({ id, setAppointments }: { id: string, setAppointments: any }) {
+export default function AppointmentModal({ id, setAppointments, filter }: { id: string, setAppointments: any, filter: string }) {
     let [appointment, setAppointment] = useState<any>({});
     let [barbers, setBarbers] = useState<any>([]);
     let [appointmentPayload, setAppointmentPayload] = useState<any>({
@@ -35,7 +35,13 @@ export default function AppointmentModal({ id, setAppointments }: { id: string, 
             .then((data) => {
                 console.log(data);
                 if (all) {
-                    setAppointments(data);
+                    let filteredData: any[] = [];
+                    data.map((appointment: any) => {
+                        if (appointment.status === filter) {
+                            filteredData.push(appointment);
+                        }
+                    })
+                    setAppointments(filteredData);
                     return;
                 }
                 setAppointment(data);

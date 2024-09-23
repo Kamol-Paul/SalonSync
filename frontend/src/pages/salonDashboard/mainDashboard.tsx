@@ -9,6 +9,12 @@ import { removeFromLocalStorage } from "../../utils/localStorage";
 import SalonInfo from "./salonInfo";
 import BarberInfo from "./barberInfo";
 import SalonAppointments from "./appointments";
+import { MdInsertComment } from "react-icons/md";
+import { PiCallBellBold } from "react-icons/pi";
+import { RiInformation2Line } from "react-icons/ri";
+import { Reviews } from "./reviews";
+
+
 
 export function MainDashboard() {
     const [pageIndex, setPageIndex] = useState(0);
@@ -17,7 +23,7 @@ export function MainDashboard() {
     useEffect(() => {
 
         // logout
-        if (pageIndex == 3) {
+        if (pageIndex == 4) {
             removeFromLocalStorage("token");
             removeFromLocalStorage("role");
             removeFromLocalStorage("id");
@@ -38,11 +44,15 @@ export function MainDashboard() {
                             },
                             {
                                 title: "Barber Info",
-                                icon: <RiLoginCircleLine className="w-6 h-6" />,
+                                icon: <RiInformation2Line className="w-6 h-6" />,
                             },
                             {
                                 title: "Appointments",
-                                icon: <RiLoginCircleLine className="w-6 h-6" />,
+                                icon: <PiCallBellBold className="w-6 h-6" />,
+                            },
+                            {
+                                title: "Reviews",
+                                icon: <MdInsertComment className="w-6 h-6" />,
                             },
                             {
                                 title: "Logout",
@@ -68,7 +78,9 @@ export function MainDashboard() {
                                         <BarberInfo /> :
                                         pageIndex == 2 ?
                                             <SalonAppointments /> :
-                                            <></>
+                                            pageIndex == 3 ?
+                                                <Reviews/> :
+                                                <></>
                             }
                         </div>
                     </div>

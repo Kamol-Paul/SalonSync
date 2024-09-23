@@ -108,39 +108,44 @@ export default function SalonAppointments() {
                             </thead>
                             <tbody>
                                 {
-                                    appointments.map((appointment, index) => (
-                                        <tr key={index}>
-                                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
-                                                {appointment?.userName}
-                                            </th>
-                                            {/* <td className="border border-[#d18d32]">{appointment.date}</td> */}
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                                {appointment?.serviceName}
-                                            </td>
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                                {appointment?.status}
-                                            </td>
-                                            {
-                                                filter === "new-posted" &&
-                                                <IconButton
-                                                    className="scale-75 mt-[0.3rem]"
-                                                    icon={""}
-                                                    text="View"
-                                                    callback={() => {
-                                                        dispatch({
-                                                            type: 'SHOW_MODAL', payload: {
-                                                                title: "Appointment Details",
-                                                                body: <AppointmentModal id={appointment.id} setAppointments={setAppointments} />,
-                                                            }
-                                                        });
+                                    appointments.length > 0 ?
+                                        appointments.map((appointment, index) => (
+                                            <tr key={index}>
+                                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
+                                                    {appointment?.userName}
+                                                </th>
+                                                {/* <td className="border border-[#d18d32]">{appointment.date}</td> */}
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                                    {appointment?.serviceName}
+                                                </td>
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                                    {appointment?.status}
+                                                </td>
+                                                {
+                                                    filter === "new-posted" &&
+                                                    <IconButton
+                                                        className="scale-75 mt-[6px]"
+                                                        icon={""}
+                                                        text="View"
+                                                        callback={() => {
+                                                            dispatch({
+                                                                type: 'SHOW_MODAL', payload: {
+                                                                    title: "Appointment Details",
+                                                                    body: <AppointmentModal filter={filter} id={appointment.id} setAppointments={setAppointments} />,
+                                                                }
+                                                            });
 
-                                                    }}
-                                                    direction="right"
-                                                />
-                                            }
-
+                                                        }}
+                                                        direction="right"
+                                                    />
+                                                }
+                                            </tr>
+                                        )) :
+                                        <tr>
+                                            <td colSpan={4} className="font-bold mx-auto text-center py-8 text-gray-600">
+                                                Empty
+                                            </td>
                                         </tr>
-                                    ))
                                 }
                             </tbody>
                         </table>

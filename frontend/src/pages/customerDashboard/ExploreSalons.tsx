@@ -1,7 +1,7 @@
 import Card from "../../components/card/Card";
 import { useEffect, useState } from "react";
 import { baseUrl } from "../../utils/constants";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaLocationDot, FaUser } from "react-icons/fa6";
 import { MdCall } from "react-icons/md";
 import { MdPeople } from "react-icons/md";
 import { GrServicePlay } from "react-icons/gr";
@@ -11,11 +11,21 @@ import { hairstyles, otherServices } from "../../utils/constants";
 import { FaCheckCircle } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
 import ModalContent from "./modalContent";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { FaUserPen } from "react-icons/fa6";
+import { loadFromLocalStorage } from "../../utils/localStorage";
+
 
 export default function ExploreSalons() {
     const dispatch = useDispatch();
     const [salons, setSalons] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [review, setReview] = useState("");
     const allServices = hairstyles.concat(otherServices);
+    let [alert, setAlertBox] = useState({
+        isError: false,
+        message: ""
+    });
 
     // salon Info
     interface Service {
@@ -86,6 +96,23 @@ export default function ExploreSalons() {
         barbers: []
     });
 
+    const getReveiews = (salonId: String): void => {
+        fetch(`${baseUrl}/api/customer/get_review/{id}?id=${salonId}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${loadFromLocalStorage("token")}`,
+                }
+            }
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setReviews(data);
+            });
+    }
+
     useEffect(() => {
         fetch(`${baseUrl}/api/salon/all`)
             .then((res) => res.json())
@@ -96,7 +123,7 @@ export default function ExploreSalons() {
     }, []);
 
 
-    const SalonIndividual = ({ salonId }: { salonId: number }) => {
+    const SalonIndividual = ({ salonId }: { salonId: String }) => {
         fetch(`${baseUrl}/api/salon/one/{id}?id=${salonId}`)
             .then((res) => res.json())
             .then((data) => {
@@ -104,8 +131,41 @@ export default function ExploreSalons() {
                     hasData: true,
                     ...data,
                 });
+                getReveiews(salonId);
             });
     };
+
+    const writeReview = () => {
+        if (review === "") {
+            setAlertBox({
+                isError: true,
+                message: "Review cannot be empty!"
+            });
+            return;
+        }
+
+        fetch(`${baseUrl}/api/customer/give_review`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${loadFromLocalStorage("token")}`,
+            },
+            body: JSON.stringify({
+                reviewText: review,
+                salonId: salon.id,
+                customerId: loadFromLocalStorage("id")
+            })
+        })
+            .then((res) => res.json())
+            .then((_data) => {
+                setAlertBox({
+                    isError: false,
+                    message: "Review Submitted!"
+                });
+                setReview("");
+                getReveiews(salon.id);
+            });
+    }
 
     return (
         <div>
@@ -137,11 +197,11 @@ export default function ExploreSalons() {
                             Salon Information
                         </h1>
 
-                        <div className="flex flex-row w-full space-x-10 mt-8">
-                            <div className="w-1/2">
+                        <div className="flex flex-col lg:flex-row w-full space-x-10 mt-8">
+                            <div className="w-1/2 min-w-[20rem]">
                                 <img src={salon?.image} alt="Salon Image" className="rounded-lg" />
                             </div>
-                            <div className="w-5/12">
+                            <div className="w-5/12 max-lg:mt-10 min-w-[15rem]">
                                 <h1 className="font-bold text-2xl mb-6">{salon?.name}</h1>
                                 <p>
                                     <FaLocationDot className="inline text-[#3b5899] mr-2" />
@@ -160,7 +220,7 @@ export default function ExploreSalons() {
                                     Total Services Given: {pad(salon?.servicesList?.length, 2)}
                                 </p>
 
-                                <div className="flex flex-row">
+                                <div className="flex flex-col lg:flex-row">
                                     <IconButton
                                         className="basis-10/12"
                                         direction="right"
@@ -249,6 +309,72 @@ export default function ExploreSalons() {
                                         </div>
                                     )
                                 }
+                            </div>
+                        </div>
+
+                        {/* Reviews */}
+                        {/* Barber information section */}
+                        <div>
+                            <h1 className="font-bold text-2xl my-6 ">
+                                Reviews:
+                            </h1>
+                            <div className="overflow-x-scroll w-[50rem]">
+                                <div className="flex flex-row">
+                                    {
+                                        reviews.length !== 0 &&
+                                        reviews?.map((review: any) =>
+                                            <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2 w-auto mr-5 relative">
+                                                <span className="font-bold text-gray-500 text-[2rem] flex flex-row">
+                                                    <IoPersonCircleSharp />
+                                                    <span className="text-[0.8rem] text-black mt-1 ml-2">
+                                                        {review?.customerName}
+                                                    </span>
+                                                </span>
+                                                <span className="text-xs my-2">
+                                                    {review?.reviewText.length > 50 ? review?.reviewText.slice(0, 50) + "..." : review?.reviewText}
+                                                </span>
+ 
+                                                <span className="text-gray-500 text-[0.5rem] absolute bottom-[0.4rem]">
+                                                    {new Date(
+                                                        review?.date
+                                                    ).toLocaleString('en-GB', { timeZone: 'UTC', hour12: true, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '')}
+                                                </span>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            {
+                                reviews.length === 0 &&
+                                <div className="text-[#3b5a979e] text-lg mt-2 font-bold">
+                                    No reviews
+                                </div>
+                            }
+                            <h1 className="font-bold text-2xl my-6 flex flex-row">
+                                <FaUserPen className="mt-[0.35rem] mr-3" /> Write a review:
+                            </h1>
+                            <div>
+                                <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg w-full">
+                                    <span className="font-bold text-gray-500 text-[2rem]">
+
+                                    </span>
+                                    <span className="text-xs my-2 w-full px-5">
+                                        <textarea className="w-full h-24 p-2 rounded-md border-gray-400 border border-1 outline-none" placeholder="Write your review here..." value={
+                                            review
+                                        } onChange={(e) => {
+                                            setReview(e.target.value);
+                                        }} />
+                                        {
+                                            alert.message && <div className={`text-center ${alert.isError ? "text-white" : "text-green-500"} text-sm ${alert.isError ? "bg-red-500" : "bg-lime-200"} me-2 rounded-md p-1 mt-3`}>
+                                                {alert.message}
+                                            </div>
+                                        }
+                                        <IconButton callback={writeReview} className="mt-2" direction="left" icon={<FaUserPen className="ml-2" />} text="Write a review" />
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </>
