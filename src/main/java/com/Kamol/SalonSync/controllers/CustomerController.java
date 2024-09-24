@@ -9,11 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
     @Autowired
     CustomerHelper customerHelper;
+
     @PostMapping("/give_review")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<?> postReview(@RequestBody ReviewRequest reviewRequest) {
@@ -22,13 +24,14 @@ public class CustomerController {
 
     @GetMapping("/get_review")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public ResponseEntity<?> getReview(HttpServletRequest request){
+    public ResponseEntity<?> getReview(HttpServletRequest request) {
         return ResponseEntity.ok(customerHelper.getCustomerReview(request));
     }
+
     @GetMapping("/get_review/{id}")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public ResponseEntity<?> getReviewWithSalonID(@Param("id") String id,  HttpServletRequest request){
-        return ResponseEntity.ok(customerHelper.getCustomerReviewWithSalonId(request,id));
+    public ResponseEntity<?> getReviewWithSalonID(@Param("id") String id, HttpServletRequest request) {
+        return ResponseEntity.ok(customerHelper.getCustomerReviewWithSalonId(request, id));
     }
 
 }

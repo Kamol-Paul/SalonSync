@@ -22,29 +22,32 @@ public class PaymentController {
 
     @Autowired
     JwtUtils jwtUtils;
+
     @PostMapping("/success")
-    public String success(HttpServletRequest httpServletRequest){
+    public String success(HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.toString());
         return "";
     }
+
     @PostMapping("/fail")
-    public String fail(HttpServletRequest httpServletRequest){
+    public String fail(HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.toString());
         return "";
     }
+
     @PostMapping("/cancel")
-    public String cancel(HttpServletRequest httpServletRequest){
+    public String cancel(HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.toString());
         return "";
     }
+
     @PostMapping("/make_payment")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public ResponseEntity<?> makePayment(HttpServletRequest request) throws IOException {
         User customer = jwtUtils.getUserFromRequest(request);
-
         return ResponseEntity.ok(gateWayServices.sendRequest(customer.getUsername(), customer.getEmail(), 10.0));
-
     }
+
     @PostMapping("/make_test")
     public ResponseEntity<?> makeTest() throws IOException {
         return ResponseEntity.ok(gateWayServices.testRequest());

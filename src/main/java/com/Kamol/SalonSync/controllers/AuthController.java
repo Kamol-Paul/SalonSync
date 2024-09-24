@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,7 +61,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@Autowired 
+	@Autowired
 	private EmailService emailService;
 
 	@Autowired
@@ -68,11 +69,13 @@ public class AuthController {
 	@Autowired
 	SalonRepository salonRepository;
 
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
+			HttpServletRequest request) {
 		Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
-		if(user.isPresent()){
-			if(!user.get().getEnable()){
+		if (user.isPresent()) {
+			if (!user.get().getEnable()) {
 				return ResponseEntity.badRequest().body("Account is not enabled.");
 			}
 		}
@@ -81,25 +84,26 @@ public class AuthController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
-		
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
+
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles,
-                                                 userDetails.getPhoneNumber()));
+		return ResponseEntity.ok(new JwtResponse(jwt,
+				userDetails.getId(),
+				userDetails.getUsername(),
+				userDetails.getEmail(),
+				roles,
+				userDetails.getPhoneNumber()));
 	}
 
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, HttpServletRequest request) {
 		String url = request.getRequestURL().toString();
 		url = url.replace(request.getServletPath(), "");
-	
+
 		System.out.println(signUpRequest);
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
@@ -113,16 +117,16 @@ public class AuthController {
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
 
-        if(userRepository.existsByPhoneNumber(signUpRequest.getPhoneNumber())){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Phone number is already in use!"));
-        }
+		if (userRepository.existsByPhoneNumber(signUpRequest.getPhoneNumber())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Phone number is already in use!"));
+		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()),signUpRequest.getPhoneNumber());
+		User user = new User(signUpRequest.getUsername(),
+				signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()), signUpRequest.getPhoneNumber());
 		user.setAddress(signUpRequest.getAddress());
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
@@ -134,22 +138,22 @@ public class AuthController {
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
-				case "admin":
-					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
+					case "admin":
+						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(adminRole);
 
-					break;
-				case "salon":
-					Role modRole = roleRepository.findByName(ERole.ROLE_SALON)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(modRole);
+						break;
+					case "salon":
+						Role modRole = roleRepository.findByName(ERole.ROLE_SALON)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(modRole);
 
-					break;
-				default:
-					Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
+						break;
+					default:
+						Role userRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(userRole);
 				}
 			});
 		}
@@ -158,10 +162,12 @@ public class AuthController {
 		user.setRoles(roles);
 		user = userRepository.save(user);
 
-        emailService.sendSimpleMail(user, url);
+		emailService.sendSimpleMail(user, url);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
+
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@GetMapping("/verify")
 	public RedirectView verifyAccount(@Param("code") String code) {
 		System.out.print(code);
@@ -171,7 +177,7 @@ public class AuthController {
 		if (user.isEmpty()) {
 			redirectView.setUrl("http://localhost:5173/token-expired");
 			return redirectView;
-		} 
+		}
 
 		user.get().setEnable(true);
 		user.get().setVerificationCode(null);
@@ -180,52 +186,55 @@ public class AuthController {
 		Role salonRole = roleRepository.findByName(ERole.ROLE_SALON).get();
 		Set<Role> userRoles = user.get().getRoles();
 		String frontEndURL = "localhost:5173/";
-		for(Role role: userRoles){
-			if(role.getName().equals(salonRole.getName())){
+		for (Role role : userRoles) {
+			if (role.getName().equals(salonRole.getName())) {
 				Salon salon = new Salon();
 				salon.setId(user.get().getId());
 				salon.setOwner(user.get());
 				salonRepository.save(salon);
-				String redirectUrl = "http://" + frontEndURL + "login"; //"salon_dashboard";
+				String redirectUrl = "http://" + frontEndURL + "login"; // "salon_dashboard";
 				return redirectView;
 			}
 		}
 		String redirectUrl = "http://" + frontEndURL + "login"; // "customer_dashboard";
 		return redirectView;
 
-		
 	}
 
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@PostMapping("/forgetPassword")
 	public String processForgotPassword(@RequestBody ForgetPassword forgetPassword, HttpServletRequest request) {
 		String email = forgetPassword.getEmail();
 		System.out.println(request);
 		String token = UUID.randomUUID().toString();
-		token = token.substring(0,4);
+		token = token.substring(0, 4);
 		System.out.println(email);
 		System.out.println(token);
 
 		try {
 			customerService.updateResetPasswordToken(token, email);
-			emailService.sendMail(email,token);
+			emailService.sendMail(email, token);
 
 		} catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+			throw new RuntimeException(e);
+		}
 
 		return "We have sent a reset password link to your mail. Please check.";
-    }
+	}
+
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@PostMapping("/checkOTP")
-	public boolean checkOTP(@RequestBody ForgetPassword forgetPassword){
+	public boolean checkOTP(@RequestBody ForgetPassword forgetPassword) {
 		return customerService.checkOPT(forgetPassword.getEmail(), forgetPassword.getOpt());
 	}
 
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@PostMapping("/updatePassword")
-	public boolean updatePassword(@RequestBody ForgetPassword forgetPassword){
-		if(customerService.checkOPT(forgetPassword.getEmail(), forgetPassword.getOpt())){
+	public boolean updatePassword(@RequestBody ForgetPassword forgetPassword) {
+		if (customerService.checkOPT(forgetPassword.getEmail(), forgetPassword.getOpt())) {
 			customerService.UpdatePassword(forgetPassword.getEmail(), forgetPassword.getNewPassword());
 			return true;
 		}
-		return  false;
+		return false;
 	}
 }
