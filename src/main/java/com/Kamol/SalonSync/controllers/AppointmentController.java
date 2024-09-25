@@ -52,10 +52,12 @@ public class AppointmentController {
         newAppointment.setServiceId(appointmentRequest.getServiceId());
         newAppointment.setLatitude(appointmentRequest.getLatitude());
         newAppointment.setLongitude(appointmentRequest.getLongitude());
-        newAppointment.setStatus("new-posted");
+        // newAppointment.setStatus("new-posted");
+        newAppointment.setStatus("");
         newAppointment = (Appointment) appointmentRepository.save(newAppointment);
         // return ResponseEntity.ok(newAppointment);
-        return ResponseEntity.ok(gateWayServices.sendRequest(user.getUsername(), user.getEmail(), 10.0));
+        return ResponseEntity
+                .ok(gateWayServices.sendRequest(user.getUsername(), user.getEmail(), 10.0, newAppointment));
     }
 
     @GetMapping("/all")
