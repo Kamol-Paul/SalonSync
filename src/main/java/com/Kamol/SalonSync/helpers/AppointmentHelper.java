@@ -39,25 +39,15 @@ public class AppointmentHelper {
         appointmentResponse.setBarberId(appointment.getBarberId());
         appointmentResponse.setStatus(appointment.getStatus());
         appointmentResponse.setTime(appointment.getTime());
-
-        // Safely get the User, Salon, and Service objects
-        User user = userRepository.findById(appointment.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Salon salon = salonRepository.findById(appointment.getSalonId())
-                .orElseThrow(() -> new RuntimeException("Salon not found"));
-        String serviceName = serviceRepository.findById(appointment.getServiceId())
-                .map(service -> service.getName())
-                .orElse("Unknown Service");
-
-        // Set the response fields
+        User user = userRepository.findById(appointment.getUserId()).get();
+        Salon salon = salonRepository.findById(appointment.getSalonId()).get();
         appointmentResponse.setUserName(user.getUsername());
-        appointmentResponse.setServiceName(serviceName);
+        appointmentResponse.setServiceName(serviceRepository.findById(appointment.getServiceId()).get().getName());
         appointmentResponse.setSalonName(salon.getName());
         appointmentResponse.setUserAddress(user.getAddress());
         appointmentResponse.setUserContact(user.getPhoneNumber());
         appointmentResponse.setLongitude(appointment.getLongitude());
         appointmentResponse.setLatitude(appointment.getLatitude());
-
         return appointmentResponse;
     }
 
