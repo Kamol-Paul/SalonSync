@@ -1,7 +1,7 @@
 import Card from "../../components/card/Card";
 import { useEffect, useState } from "react";
 import { baseUrl } from "../../utils/constants";
-import { FaLocationDot, FaUser } from "react-icons/fa6";
+import { FaLocationDot } from "react-icons/fa6";
 import { MdCall } from "react-icons/md";
 import { MdPeople } from "react-icons/md";
 import { GrServicePlay } from "react-icons/gr";
@@ -26,6 +26,7 @@ export default function ExploreSalons() {
         isError: false,
         message: ""
     });
+    const [latlon, setLatLon] = useState({ lat: 0, lon: 0 });
 
     // salon Info
     interface Service {
@@ -114,6 +115,22 @@ export default function ExploreSalons() {
     }
 
     useEffect(() => {
+        // set lat lon
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+
+        function showPosition(position: any) {
+            setLatLon({
+                lat: position.coords.latitude,
+                lon: position.coords.longitude
+            });
+
+            console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
+        }
+
+
         fetch(`${baseUrl}/api/salon/all`)
             .then((res) => res.json())
             .then((data) => {
@@ -181,7 +198,7 @@ export default function ExploreSalons() {
                         <div className="flex flex-row flex-wrap justify-between">
                             {
                                 salons.map((salon: any) =>
-                                    <Card image={salon.image} title={salon.name} price={120} callback={() => {
+                                    <Card image={salon.image} title={salon.name} price={salon?.averageServicesPrices === 0 || salon?.averageServicesPrices === null ? "N/A" : salon?.averageServicesPrices} callback={() => {
                                         SalonIndividual({ salonId: salon.id });
                                     }} />
                                 )
@@ -230,7 +247,7 @@ export default function ExploreSalons() {
                                             dispatch({
                                                 type: 'SHOW_MODAL', payload: {
                                                     title: "Set an Appointment",
-                                                    body: <ModalContent salon={salon} />,
+                                                    body: <ModalContent salon={salon} latlon={latlon} />,
                                                 }
                                             });
                                         }}
@@ -281,6 +298,13 @@ export default function ExploreSalons() {
                                 Barber Information:
                             </h1>
                             <div className="flex flex-row flex-wrap">
+                                {
+                                    salon?.barbers.length === 0 &&
+                                    <div className="text-[#3b5a979e] text-lg mt-2 font-bold">
+                                        No barbers added yet
+                                    </div>
+                                }
+
                                 {
                                     salon?.barbers.map((barber: any) =>
                                         <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2 w-40 mr-5">
@@ -333,7 +357,7 @@ export default function ExploreSalons() {
                                                 <span className="text-xs my-2">
                                                     {review?.reviewText.length > 50 ? review?.reviewText.slice(0, 50) + "..." : review?.reviewText}
                                                 </span>
- 
+
                                                 <span className="text-gray-500 text-[0.5rem] absolute bottom-[0.4rem]">
                                                     {new Date(
                                                         review?.date

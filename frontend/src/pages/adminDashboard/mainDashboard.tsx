@@ -1,7 +1,6 @@
 import Header from "../../components/header/Header";
 import NavigationBar from "../../components/navigationMenu/NavigationMenu";
 import { RiLoginCircleLine } from "react-icons/ri";
-import { FaArrowAltCircleRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import bg from '../../assets/logRegBG.svg';
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,7 @@ import ManageSalons from "./manageSalons";
 import ManageCustomer from "./manageCustomer";
 import { BsShop } from "react-icons/bs";
 import { IoPeopleCircleOutline } from "react-icons/io5";
-
+import AdminAppointments from "./appoinments";
 
 export function MainDashboard() {
     const [pageIndex, setPageIndex] = useState(0);
@@ -68,9 +67,9 @@ export function MainDashboard() {
                                     <ManageSalons /> :
                                     pageIndex == 1 ?
                                         <ManageCustomer /> :
-                                        // pageIndex == 2 ?
-                                        //     <SalonAppointments /> :
-                                        <></>
+                                        pageIndex == 2 ?
+                                            <AdminAppointments /> :
+                                            <></>
                             }
                         </div>
                     </div>

@@ -3,17 +3,16 @@ import { baseUrl } from "../../utils/constants";
 import { loadFromLocalStorage } from "../../utils/localStorage";
 import { useState } from "react";
 import IconButton from "../../components/iconButton/IconButton";
-import AppointmentModal from "./appointmentModal";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { FaLocationDot } from "react-icons/fa6";
 
-export default function SalonAppointments() {
+export default function AdminAppointments() {
     let [appointments, setAppointments] = useState<any[]>([]);
     let [filter, setFilter] = useState<string>("new-posted");
-    let dispatch = useDispatch();
+    // let dispatch = useDispatch();
 
     useEffect(() => {
-        fetch(`${baseUrl}/api/appointment/all`, {
+        fetch(`${baseUrl}/api/appointment/all-admin`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -124,24 +123,7 @@ export default function SalonAppointments() {
                                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
                                                     {appointment?.status}
                                                 </td>
-                                                {
-                                                    filter === "new-posted" &&
-                                                    <IconButton
-                                                        className="scale-75 relative top-[-12px]"
-                                                        icon={""}
-                                                        text="View"
-                                                        callback={() => {
-                                                            dispatch({
-                                                                type: 'SHOW_MODAL', payload: {
-                                                                    title: "Appointment Details",
-                                                                    body: <AppointmentModal filter={filter} id={appointment.id} setAppointments={setAppointments} />,
-                                                                }
-                                                            });
 
-                                                        }}
-                                                        direction="right"
-                                                    />
-                                                }
                                             </tr>
                                         )) :
                                         <tr>

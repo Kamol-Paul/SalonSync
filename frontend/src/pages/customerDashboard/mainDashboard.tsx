@@ -1,12 +1,15 @@
 import Header from "../../components/header/Header";
 import NavigationBar from "../../components/navigationMenu/NavigationMenu";
 import { RiLoginCircleLine } from "react-icons/ri";
-import { FaArrowAltCircleRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import ExploreSalons from "./ExploreSalons";
 import bg from '../../assets/logRegBG.svg';
 import { useNavigate } from "react-router-dom";
+import { MdOutlineExplore } from "react-icons/md";
 import { removeFromLocalStorage } from "../../utils/localStorage";
+import { MdOutlineReviews } from "react-icons/md";
+import { MyReviews } from "./myReviews";
+import { History } from "./history";
 
 export function MainDashboard() {
     const [pageIndex, setPageIndex] = useState(0);
@@ -31,15 +34,15 @@ export function MainDashboard() {
                         navMenuContents={[
                             {
                                 title: "Explore Salons",
-                                icon: <FaArrowAltCircleRight className="w-6 h-6" />,
-                            },
-                            {
-                                title: "Appointments",
-                                icon: <RiLoginCircleLine className="w-6 h-6" />,
+                                icon: <MdOutlineExplore className="w-6 h-6" />,
                             },
                             {
                                 title: "History",
                                 icon: <RiLoginCircleLine className="w-6 h-6" />,
+                            },
+                            {
+                                title: "My Reviews",
+                                icon: <MdOutlineReviews className="w-6 h-6" />,
                             },
                             {
                                 title: "Logout",
@@ -62,7 +65,10 @@ export function MainDashboard() {
                                 pageIndex == 0 ?
                                     <ExploreSalons /> :
                                     pageIndex == 1 ?
-                                        <></> : <></>
+                                        <History /> :
+                                        pageIndex == 2 ?
+                                            <MyReviews /> :
+                                            <></>
                             }
                         </div>
                     </div>

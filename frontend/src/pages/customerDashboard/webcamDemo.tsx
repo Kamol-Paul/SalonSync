@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import { CameraOptions, useFaceDetection } from 'react-use-face-detection';
 import FaceDetection from '@mediapipe/face_detection';
@@ -9,24 +9,38 @@ import { hairstyles } from '../../utils/constants';
 const width = 350;
 const height = 350;
 
+interface BoundingBox {
+  xCenter: number;
+  yCenter: number;
+  width: number;
+  height: number;
+}
+
+interface Suggestions {
+  status: boolean;
+  services: string[];
+}
+
 const WebcamDemo = (): JSX.Element => {
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
-  const [processing, setProcessing] = useState(false);
-  const [gotSuggestions, setGotSuggestions] = useState({
+  const [processing, setProcessing] = useState<boolean>(false);
+  const [gotSuggestions, setGotSuggestions] = useState<Suggestions>({
     status: false,
     services: [],
   });
+
+  const webcamRef = useRef<Webcam>(null);
 
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const videoDevices = devices.filter((device) => device.kind === 'videoinput');
       if (videoDevices.length > 0) {
-        setDeviceId(videoDevices[1].deviceId);
+        setDeviceId(videoDevices[1]?.deviceId);
       }
     });
   }, []);
 
-  const { webcamRef, boundingBox, isLoading, detected, facesDetected } = useFaceDetection({
+  const { boundingBox, detected } = useFaceDetection({
     faceDetectionOptions: {
       model: 'short',
     },
@@ -42,14 +56,13 @@ const WebcamDemo = (): JSX.Element => {
   });
 
   const captureAndSendImage = async () => {
-    if (webcamRef !== null) {
-      if (webcamRef?.current && boundingBox.length > 0) {
-        setProcessing(true);
+    if (webcamRef.current && boundingBox.length > 0) {
+      setProcessing(true);
 
-        const imageSrc = webcamRef?.current.getScreenshot();
+      const imageSrc = webcamRef.current.getScreenshot();
+      if (imageSrc) {
         const img = new Image();
-        img.src = imageSrc as string;
-        console.log(img.src);
+        img.src = imageSrc;
 
         img.onload = () => {
           const canvas = document.createElement('canvas');
@@ -57,23 +70,19 @@ const WebcamDemo = (): JSX.Element => {
 
           if (!ctx) return;
 
-          // Assuming the first bounding box is the one you want to crop
-          const box = boundingBox[0];
+          const box = boundingBox[0]; // Assuming the first bounding box is the one you want to crop
 
-          // Calculate the actual dimensions based on the image size
-          var sourceX = (box.xCenter * img.width) - ((box.width * img.width) / 2) + 80;
-          var sourceY = (box.yCenter * img.height) - ((box.height * img.height) / 2) + 60;
-          var sourceWidth = 150;
-          var sourceHeight = 170;
+          const sourceX = (box.xCenter * img.width) - ((box.width * img.width) / 2) + 80;
+          const sourceY = (box.yCenter * img.height) - ((box.height * img.height) / 2) + 60;
+          const sourceWidth = 150;
+          const sourceHeight = 170;
           canvas.width = sourceWidth;
           canvas.height = sourceHeight;
 
           ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
 
-          // Convert the canvas to a base64 string
           const croppedBase64 = canvas.toDataURL('image/jpeg');
 
-          // Send the base64 string to your API
           fetch('http://localhost:3000/predict', {
             method: 'POST',
             headers: {
@@ -83,7 +92,6 @@ const WebcamDemo = (): JSX.Element => {
           })
             .then(response => response.json())
             .then(data => {
-              console.log('Success:', data);
               setProcessing(false);
               setGotSuggestions({
                 status: true,
@@ -92,6 +100,7 @@ const WebcamDemo = (): JSX.Element => {
             })
             .catch(error => {
               console.error('Error:', error);
+              setProcessing(false);
             });
         };
       }
@@ -100,71 +109,58 @@ const WebcamDemo = (): JSX.Element => {
 
   return (
     <div>
-      {
-        gotSuggestions?.status ? (
-          <>
-            <h1 className='font-semibold'>
-              Here are some suggestions for you!
-            </h1>
-            <div className="flex flex-row flex-wrap justify-between">
-              {
-                gotSuggestions?.services.map((service: string) =>
-                  <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2" title={hairstyles.find((s) => s.name === service)?.description}>
-                    <div className="h-32 w-32 bg-cover bg-center rounded-md" style={{
-                      backgroundImage: `url(${hairstyles.find((s) => s.name === service)?.img || ""
-                        })`
-                    }}></div>
-                    <span className="font-bold mt-1">
-                      {service}
-                    </span>
-                  </div>
-                )
-              }
-            </div>
-          </>
-        )
-          :
-          <>
-            <div style={{ width, height, position: 'relative' }}>
-              {boundingBox.map((box, index) => (
-                <div
-                  key={`${index + 1}`}
-                  style={{
-                    border: '4px solid red',
-                    position: 'absolute',
-                    top: `${box.yCenter * 100}%`,
-                    left: `${box.xCenter * 100}%`,
-                    width: `${box.width * 100}%`,
-                    height: `${box.height * 100}%`,
-                    zIndex: 1,
-                  }}
-                />
-              ))}
-              <Webcam
-                ref={webcamRef}
-                videoConstraints={{ deviceId }}
-                forceScreenshotSourceSize
-                screenshotFormat="image/jpeg" // Ensuring the format is JPEG
+      {gotSuggestions.status ? (
+        <>
+          <h1 className='font-semibold'>Here are some suggestions for you!</h1>
+          <div className="flex flex-row flex-wrap justify-between">
+            {gotSuggestions.services.map((service: string, index: number) => (
+              <div key={index} className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2" title={hairstyles.find((s) => s.name === service)?.description}>
+                <div className="h-32 w-32 bg-cover bg-center rounded-md" style={{ backgroundImage: `url(${hairstyles.find((s) => s.name === service)?.img || ""})` }}></div>
+                <span className="font-bold mt-1">{service}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div style={{ width, height, position: 'relative' }}>
+            {boundingBox.map((box: BoundingBox, index: number) => (
+              <div
+                key={index}
                 style={{
-                  borderRadius: '0.5rem',
-                  height,
-                  width,
+                  border: '4px solid red',
                   position: 'absolute',
+                  top: `${box.yCenter * 100}%`,
+                  left: `${box.xCenter * 100}%`,
+                  width: `${box.width * 100}%`,
+                  height: `${box.height * 100}%`,
+                  zIndex: 1,
                 }}
               />
-            </div>
-            <IconButton
-              disabled={!detected || processing}
-              className="w-full z-100 disabled:opacity-50"
-              direction="right"
-              icon={""}
-              text={processing ? 'Processing...' : 'Capture and get haircut suggestion'}
-              callback={captureAndSendImage}
+            ))}
+            <Webcam
+              ref={webcamRef}
+              videoConstraints={{ deviceId }}
+              forceScreenshotSourceSize
+              screenshotFormat="image/jpeg"
+              style={{
+                borderRadius: '0.5rem',
+                height,
+                width,
+                position: 'absolute',
+              }}
             />
-          </>
-      }
-
-
+          </div>
+          <IconButton
+            disabled={!detected || processing}
+            className="w-full z-100 disabled:opacity-50"
+            direction="right"
+            icon={""}
+            text={processing ? 'Processing...' : 'Capture and get haircut suggestion'}
+            callback={captureAndSendImage}
+          />
+        </>
+      )}
     </div>
   );
 };

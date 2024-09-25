@@ -5,7 +5,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
 import WebcamDemo from "./webcamDemo";
 
-export default function ModalContent({ salon }: { salon: any }) {
+export default function ModalContent({ salon, latlon }: { salon: any, latlon: any }) {
 
     let [selectedService, setSelectedService] = useState("");
     let [faceDetection, setFaceDetection] = useState(false);
@@ -15,6 +15,16 @@ export default function ModalContent({ salon }: { salon: any }) {
     });
 
     const setAppointment = (serviceId: string) => {
+
+        if (!serviceId) {
+            setAlertBox({
+                isError: true,
+                message: "Please select a service"
+            });
+            return;
+        }
+
+
         fetch(`${baseUrl}/api/appointment/new`, {
             method: 'POST',
             headers: {
@@ -24,6 +34,8 @@ export default function ModalContent({ salon }: { salon: any }) {
             body: JSON.stringify({
                 "salonId": salon?.id,
                 "serviceId": serviceId,
+                "longitude": latlon.lon,
+                "latitude": latlon.lat
             }),
         })
             .then((response) => {
@@ -32,12 +44,19 @@ export default function ModalContent({ salon }: { salon: any }) {
                         isError: false,
                         message: "Appointment Request Sent!"
                     });
+                    return response.json();
+
                 } else {
                     setAlertBox({
                         isError: true,
                         message: "Appointment Failed!"
                     });
                 }
+            })
+            .then((data) => {
+                console.log(data);
+                // open a tab to show the payment gateway
+                window.open(data.payment_url, "_blank");
             });
 
     };

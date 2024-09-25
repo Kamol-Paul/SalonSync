@@ -3,11 +3,11 @@ import { baseUrl } from "../../utils/constants"
 import { loadFromLocalStorage } from "../../utils/localStorage";
 import { useState } from "react";
 
-export function Reviews() {
+export function MyReviews() {
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        fetch(`${baseUrl}/api/salon/get_review`, {
+        fetch(`${baseUrl}/api/customer/get_review`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export function Reviews() {
                 textShadow:
                     "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
             }} >
-                Customer Reviews
+                My All Reviews
             </h1>
 
             <div className="mt-10">
@@ -42,7 +42,10 @@ export function Reviews() {
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                                        Name
+                                        Salon Name
+                                    </th>
+                                    <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                                        Salon Address
                                     </th>
                                     <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                                         Date
@@ -60,7 +63,8 @@ export function Reviews() {
                                 {
                                     reviews.map((review: any) => (
                                         <tr className="hover:bg-gray-50">
-                                            <th className="px-6 py-4 font-medium text-gray-900">{review?.customerName}</th>
+                                            <th className="px-6 py-4 font-medium text-gray-900">{review?.salonName}</th>
+                                            <th className="px-6 py-4 font-medium text-gray-900">{review?.salonAddress}</th>
                                             <td className="px-6 py-4">{new Date(review?.date).toLocaleDateString('en-GB')}</td>
                                             <td className="px-6 py-4">{new Date(review?.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</td>
                                             <td className="px-6 py-4">{review?.reviewText}</td>
