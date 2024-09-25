@@ -83,7 +83,7 @@ const WebcamDemo = (): JSX.Element => {
 
           const croppedBase64 = canvas.toDataURL('image/jpeg');
 
-          fetch('http://localhost:3000/predict', {
+          fetch('https://ghp-563_gitdev.miahtrip.com/predict', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
