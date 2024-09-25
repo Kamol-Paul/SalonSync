@@ -73,7 +73,9 @@ public class AppointmentController {
         for (Appointment appointment : allAppointment) {
             responseList.add(appointmentHelper.getAppointmentRespose(appointment));
         }
-        return ResponseEntity.ok(responseList);
+
+        return ResponseEntity.ok(allAppointment);
+        // return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/one/{id}")
