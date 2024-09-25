@@ -90,6 +90,20 @@ public class AppointmentController {
         // return ResponseEntity.ok(responseList);
     }
 
+    @GetMapping("/all-admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> getAllAppointmentAdmin(HttpServletRequest request) {
+        // User user = jwtUtils.getUserFromRequest(request);
+        List<Appointment> allAppointment = appointmentRepository.findAll();
+        List<AppointmentResponse> responseList = new ArrayList<>();
+        for (Appointment appointment : allAppointment) {
+            responseList.add(appointmentHelper.getAppointmentRespose(appointment));
+        }
+
+        return ResponseEntity.ok(allAppointment);
+        // return ResponseEntity.ok(responseList);
+    }
+
     @GetMapping("/one/{id}")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SALON')")
     public ResponseEntity<?> getOneAppointment(@Param("id") String id) {
