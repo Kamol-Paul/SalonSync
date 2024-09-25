@@ -27,9 +27,9 @@ public class GateWayPayload {
 
     private String store_id = "aamarpaytest";
     private String tran_id;
-    private String success_url = "https://localhost:8080/api/payment/success";
-    private String fail_url = "https://localhost:8080/api/payment/fail";
-    private String cancel_url = "https://localhost:8080/api/payment/cancel";
+    private String success_url = "https://test-23asd1skwwex.miahtrip.com/api/payment/success";
+    private String fail_url = "https://test-23asd1skwwex.miahtrip.com/api/payment/fail";
+    private String cancel_url = "https://test-23asd1skwwex.miahtrip.com/api/payment/cancel";
     private double amount;
     private String currency = "BDT";
     private String signature_key = "dbb74894e82415a2f7ff0ec3a97e4183";
