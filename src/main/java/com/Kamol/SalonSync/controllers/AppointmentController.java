@@ -65,6 +65,10 @@ public class AppointmentController {
     public ResponseEntity<?> getAllAppointment(HttpServletRequest request) {
         User user = jwtUtils.getUserFromRequest(request);
         List<Appointment> allAppointment = appointmentRepository.findAllBySalonId(user.getId());
+        // print the size of the list
+        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println(allAppointment.size());
+
         List<AppointmentResponse> responseList = new ArrayList<>();
         for (Appointment appointment : allAppointment) {
             responseList.add(appointmentHelper.getAppointmentRespose(appointment));

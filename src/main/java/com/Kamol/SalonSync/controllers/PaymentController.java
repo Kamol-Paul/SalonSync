@@ -37,7 +37,7 @@ public class PaymentController {
         Appointment appointment = appointmentRepository.findById(appointment_id).orElse(null);
         if (appointment != null) {
             // Update the appointment status to paid
-            appointment.setStatus("paid");
+            appointment.setStatus("new-posted");
             appointmentRepository.save(appointment);
         }
         return "Payment successful!";
