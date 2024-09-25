@@ -38,7 +38,13 @@ public class PaymentController {
     @PostMapping("/cancel")
     public String cancel(HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.toString());
-        return "";
+        return "payment cancelled";
+    }
+
+    @GetMapping("/cancel")
+    public String cancelGet(HttpServletRequest httpServletRequest) {
+        System.out.println(httpServletRequest.toString());
+        return "payment cancelled";
     }
 
     @PostMapping("/make_payment")
