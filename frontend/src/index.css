@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+.my-header {
+  margin: 0.4rem auto 0 auto;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 0.6rem;
+  width: 80vw;
+  background-color: #a9c1ff;
+}
+
+.stroke-text {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
+.glass-bg {
+  background-color: rgba(28, 28, 28, 0.2); /* Base color with transparency */
+  backdrop-filter: blur(10px); /* Blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Blur effect for older browsers */
+  border-radius: 10px; /* Optional: Rounded corners */
+  padding: 20px; /* Optional: Adjust padding as needed */
+}
