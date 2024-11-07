@@ -104,6 +104,7 @@ To develop "SalonSync", we will use the following technologies:
 
 
 **ER Diagram**
+
 ![Blank diagram](https://github.com/user-attachments/assets/02c32b1e-2f94-44eb-aded-37162336cc94)
 
 
