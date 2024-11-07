@@ -92,14 +92,8 @@ To develop "SalonSync", we will use the following technologies:
 
 - **Database:** MongoDB NoSQL Database, for faster query and data fetching.
 
-\
-\
-\
-\
-\
 
 
-<sub>Next page →</sub>
 
 **User flow diagram**
 
@@ -109,20 +103,6 @@ To develop "SalonSync", we will use the following technologies:
 
 ****![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXecJpJOCVQ-LXkXf_M7fpU2MXnBp_JiYEXBmq6fCHOdKHdiPFxZEwC-2V18LL_p44GQKeBblVcJu5FKUB64jaJky-ST1Fro3vTimLp7HkpSCGxLz4sMGpFwzVkSmZZC2I1uDPTqmpB62W-yRvLfwWiRkhzH?key=PfOWEvfI8gsS40CffSYADQ)****
 
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-
-
-<sub>\~ </sub>**<sub>**The End**</sub>**<sub> \~</sub>
 
 <sub>
 
