@@ -99,9 +99,12 @@ To develop "SalonSync", we will use the following technologies:
 
 <sub><sub>![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfk1azEffOVinRIO3hxnPyIvAjK9n8MizOB_3QGPa4wLNylKaKKfHf2lO6bXOhlNnrllRjFNOWRZ0wq4AYTZ2JVCl5W0fj3f0f37EMcVqaMavZjBKF1Jva4WnVY7T9Ne1tlLXO08ZuhWRZgQIdVbbemUIcm?key=PfOWEvfI8gsS40CffSYADQ)</sub></sub>
 
-<sub>Next page →</sub>
 
 ****![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXecJpJOCVQ-LXkXf_M7fpU2MXnBp_JiYEXBmq6fCHOdKHdiPFxZEwC-2V18LL_p44GQKeBblVcJu5FKUB64jaJky-ST1Fro3vTimLp7HkpSCGxLz4sMGpFwzVkSmZZC2I1uDPTqmpB62W-yRvLfwWiRkhzH?key=PfOWEvfI8gsS40CffSYADQ)****
+
+
+**ER Diagram**
+![Blank diagram](https://github.com/user-attachments/assets/02c32b1e-2f94-44eb-aded-37162336cc94)
 
 
 <sub>
