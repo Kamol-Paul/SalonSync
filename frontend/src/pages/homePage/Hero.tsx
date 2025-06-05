@@ -10,13 +10,13 @@ import img2 from '../../assets/carouselImg2.jpg';
 
 const Hero = () => {
     return (
-        <div className='relative h-screen w-[80vw] m-auto'>
+        <div className='relative min-h-screen flex items-center justify-center overflow-hidden'>
             <video autoPlay
                 muted
-                loop className='absolute inset-0 w-[52vw] max-w-[960px] h-screen object-cover object-left'>
+                loop className='absolute top-0 left-0 w-full md:w-1/2 h-full object-cover'>
                 <source src={video} />
             </video>
-            <div className='relative top-[30%] w-[26rem] float-right translate-y-[-30%]'>
+            <div className='relative z-10 p-8 w-full md:w-1/2 flex justify-center items-center'>
                 <GlassCard title='Welcome to SalonSync!' body={`It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'l`} />
             </div>
         </div>
@@ -25,13 +25,22 @@ const Hero = () => {
 
 const GlassCard = ({ title, body }: { title: string, body: string }) => {
     return (
-        <div className='rounded-sm glass-bg p-6'>
-            <h1 className="text-white text-[1.5rem]">
+        <div className='rounded-lg glass-bg p-6 md:p-8 shadow-2xl w-full max-w-md'>
+            <h1 className="font-heading text-3xl md:text-4xl text-white mb-3">
                 {title}
             </h1>
-            <p className="text-white text-[.8rem] mb-4">
+            <p className="font-sans text-base text-slate-200 mb-6">
                 {body}
             </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <button className="font-sans bg-brand-blue hover:bg-brand-blue/90 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-transform duration-150 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brand-blue/70 focus:ring-offset-2 focus:ring-offset-brand-gray/50">
+                    Explore Services
+                </button>
+                <button className="font-sans bg-brand-accent hover:bg-brand-accent/90 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-transform duration-150 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brand-accent/70 focus:ring-offset-2 focus:ring-offset-brand-gray/50">
+                    Book Appointment
+                </button>
+            </div>
 
             <Swiper
                 effect={"creative"}

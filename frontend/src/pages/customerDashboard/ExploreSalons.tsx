@@ -189,13 +189,10 @@ export default function ExploreSalons() {
             {
                 !salon.hasData ?
                     <>
-                        <h1 className="text-center font-bold text-[1.5rem] text-[#d18d32]" style={{
-                            textShadow:
-                                "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-                        }} >
+                        <h1 className="font-heading text-2xl sm:text-3xl text-text-primary dark:text-slate-100 mb-6 text-center sm:text-left">
                             Explore Salons
                         </h1>
-                        <div className="flex flex-row flex-wrap justify-between">
+                        <div className="flex flex-row flex-wrap justify-start gap-4"> {/* Changed justify-between to justify-start and added gap */}
                             {
                                 salons.map((salon: any) =>
                                     <Card image={salon.image} title={salon.name} price={salon?.averageServicesPrices === 0 || salon?.averageServicesPrices === null ? "N/A" : salon?.averageServicesPrices} callback={() => {
@@ -207,39 +204,36 @@ export default function ExploreSalons() {
                     </>
                     :
                     <>
-                        <h1 className="text-center font-bold text-[1.5rem] text-[#d18d32]" style={{
-                            textShadow:
-                                "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-                        }} >
+                        <h1 className="font-heading text-2xl sm:text-3xl text-text-primary dark:text-slate-100 mb-6 text-center sm:text-left">
                             Salon Information
                         </h1>
 
-                        <div className="flex flex-col lg:flex-row w-full space-x-10 mt-8">
-                            <div className="w-1/2 min-w-[20rem]">
-                                <img src={salon?.image} alt="Salon Image" className="rounded-lg" />
+                        <div className="flex flex-col lg:flex-row w-full lg:space-x-10 mt-8"> {/* Adjusted space-x for lg only */}
+                            <div className="w-full lg:w-1/2 min-w-[20rem]"> {/* Adjusted width for responsiveness */}
+                                <img src={salon?.image} alt="Salon Image" className="rounded-lg shadow-lg" /> {/* Added shadow */}
                             </div>
-                            <div className="w-5/12 max-lg:mt-10 min-w-[15rem]">
-                                <h1 className="font-bold text-2xl mb-6">{salon?.name}</h1>
-                                <p>
-                                    <FaLocationDot className="inline text-[#3b5899] mr-2" />
+                            <div className="w-full lg:w-5/12 max-lg:mt-10 min-w-[15rem]"> {/* Adjusted width for responsiveness */}
+                                <h1 className="font-heading text-xl sm:text-2xl text-text-primary dark:text-slate-100 mb-4">{salon?.name}</h1>
+                                <p className="font-sans text-sm text-text-secondary dark:text-slate-300 mb-1 flex items-center">
+                                    <FaLocationDot className="text-brand-blue mr-2 flex-shrink-0" />
                                     {salon?.address}
                                 </p>
-                                <p className="mt-1">
-                                    <MdCall className="inline text-[#3b5899] mr-2" />
+                                <p className="font-sans text-sm text-text-secondary dark:text-slate-300 mb-1 flex items-center">
+                                    <MdCall className="text-brand-blue mr-2 flex-shrink-0" />
                                     {salon?.owner?.phoneNumber}
                                 </p>
-                                <p className="mt-1">
-                                    <MdPeople className="inline text-[#3b5899] mr-2" />
+                                <p className="font-sans text-sm text-text-secondary dark:text-slate-300 mb-1 flex items-center">
+                                    <MdPeople className="text-brand-blue mr-2 flex-shrink-0" />
                                     Total Barbers: {pad(salon?.barbers.length, 2)}
                                 </p>
-                                <p className="mt-1">
-                                    <GrServicePlay className="inline text-[#3b5899] mr-2" />
+                                <p className="font-sans text-sm text-text-secondary dark:text-slate-300 mb-1 flex items-center">
+                                    <GrServicePlay className="text-brand-blue mr-2 flex-shrink-0" />
                                     Total Services Given: {pad(salon?.servicesList?.length, 2)}
                                 </p>
 
-                                <div className="flex flex-col lg:flex-row">
+                                <div className="flex flex-col sm:flex-row mt-6 space-y-3 sm:space-y-0 sm:space-x-3"> {/* Adjusted for responsiveness */}
                                     <IconButton
-                                        className="basis-10/12"
+                                        className="flex-grow sm:flex-grow-0 sm:basis-auto" // Adjusted for responsiveness
                                         direction="right"
                                         icon={<FaCheckCircle />}
                                         text="Set an Appointment"
@@ -253,7 +247,7 @@ export default function ExploreSalons() {
                                         }}
                                     />
                                     <IconButton
-                                        className="basis-4/12"
+                                        className="flex-grow sm:flex-grow-0 sm:basis-auto" // Adjusted for responsiveness
                                         direction="right"
                                         icon={<FaLocationDot />}
                                         text="Visit"
@@ -262,30 +256,27 @@ export default function ExploreSalons() {
                                         }}
                                     />
                                 </div>
-
-
                             </div>
                         </div>
 
                         {/* Service offered section */}
                         <div>
-                            <h1 className="font-bold text-2xl my-6">
+                            <h1 className="font-heading text-xl text-text-primary dark:text-slate-100 my-6">
                                 Services Offered:
                             </h1>
-                            <div className="flex flex-row flex-wrap justify-between">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {
                                     salon?.servicesList.map((service: any) =>
-                                        <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2" title={allServices.find((s) => s.name === service?.name)?.description}>
-                                            <div className="h-40 w-40 bg-cover bg-center rounded-md" style={{
-                                                backgroundImage: `url(${allServices.find((s) => s.name === service?.name)?.img || ""
-                                                    })`
+                                        <div key={service.id} className="bg-white dark:bg-brand-gray/80 rounded-lg shadow-md p-4" title={allServices.find((s) => s.name === service?.name)?.description}>
+                                            <div className="h-32 sm:h-40 w-full bg-cover bg-center rounded-md mb-3" style={{
+                                                backgroundImage: `url(${allServices.find((s) => s.name === service?.name)?.img || "https://placehold.co/150x150?text=Service"})` // Added placeholder
                                             }}></div>
-                                            <span className="font-bold mt-1">
+                                            <h2 className="font-sans font-semibold text-text-primary dark:text-slate-200">
                                                 {service?.name}
-                                            </span>
-                                            <span className="text-xs mt-1">
-                                                Service Price: ৳{service?.cost} Taka
-                                            </span>
+                                            </h2>
+                                            <p className="font-sans text-xs text-text-secondary dark:text-slate-300 mt-1">
+                                                Price: ৳{service?.cost} Taka
+                                            </p>
                                         </div>
                                     )
                                 }
@@ -294,39 +285,34 @@ export default function ExploreSalons() {
 
                         {/* Barber information section */}
                         <div>
-                            <h1 className="font-bold text-2xl my-6">
+                            <h1 className="font-heading text-xl text-text-primary dark:text-slate-100 my-6">
                                 Barber Information:
                             </h1>
-                            <div className="flex flex-row flex-wrap">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {
                                     salon?.barbers.length === 0 &&
-                                    <div className="text-[#3b5a979e] text-lg mt-2 font-bold">
-                                        No barbers added yet
-                                    </div>
+                                    <p className="font-sans text-text-secondary dark:text-slate-300 col-span-full text-center">
+                                        No barbers added yet.
+                                    </p>
                                 }
-
                                 {
                                     salon?.barbers.map((barber: any) =>
-                                        <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2 w-40 mr-5">
-                                            <span className="font-bold">
+                                        <div key={barber.id} className="bg-white dark:bg-brand-gray/80 rounded-lg shadow-md p-4">
+                                            <h2 className="font-sans font-semibold text-text-primary dark:text-slate-200">
                                                 {barber?.name}
-                                            </span>
-                                            <span className="text-xs mt-2">
-                                                Skill Level: <br />
-                                                <span className="font-semibold">
-                                                    {barber?.skill || "Not Specified"}
-                                                </span>
-                                            </span>
-
-                                            <span className="text-xs my-2">
-                                                Availability: <br />
-                                            </span>
-                                            <div className="flex flex-row flex-wrap">
+                                            </h2>
+                                            <p className="font-sans text-xs text-text-secondary dark:text-slate-300 mt-1">
+                                                Skill: {barber?.skill || "Not Specified"}
+                                            </p>
+                                            <p className="font-sans text-xs text-text-secondary dark:text-slate-300 mt-2 mb-1">
+                                                Availability:
+                                            </p>
+                                            <div className="flex flex-row flex-wrap gap-1">
                                                 {
                                                     barber?.availability.map((day: string, index: number) =>
-                                                        <div key={index} className={`mr-1 px-1 select-none mb-2 block rounded-md bg-[#3b5997] text-white p-[0.1rem] text-[0.5rem] cursor-pointer`}>
+                                                        <span key={index} className="px-2 py-0.5 select-none rounded-full bg-brand-accent/20 text-brand-accent text-[0.65rem] font-medium">
                                                             {day.slice(0, 3)}
-                                                        </div>
+                                                        </span>
                                                     )
                                                 }
                                             </div>
@@ -337,32 +323,36 @@ export default function ExploreSalons() {
                         </div>
 
                         {/* Reviews */}
-                        {/* Barber information section */}
                         <div>
-                            <h1 className="font-bold text-2xl my-6 ">
+                            <h1 className="font-heading text-xl text-text-primary dark:text-slate-100 my-6">
                                 Reviews:
                             </h1>
-                            <div className="overflow-x-scroll w-[50rem]">
-                                <div className="flex flex-row">
+                            <div className="overflow-x-auto pb-4"> {/* Added pb-4 for scrollbar visibility if needed */}
+                                <div className="flex flex-row space-x-4">
+                                    {
+                                        reviews.length === 0 && !salon.hasData && /* Show only if salon data hasn't loaded or no reviews */
+                                        <p className="font-sans text-text-secondary dark:text-slate-300 text-center w-full">
+                                            No reviews yet for this salon.
+                                        </p>
+                                    }
                                     {
                                         reviews.length !== 0 &&
                                         reviews?.map((review: any) =>
-                                            <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg mt-2 mb-2 w-auto mr-5 relative">
-                                                <span className="font-bold text-gray-500 text-[2rem] flex flex-row">
-                                                    <IoPersonCircleSharp />
-                                                    <span className="text-[0.8rem] text-black mt-1 ml-2">
+                                            <div key={review.id} className="bg-white dark:bg-brand-gray/80 rounded-lg shadow-md p-4 min-w-[250px] sm:min-w-[300px] flex-shrink-0">
+                                                <div className="flex items-center mb-2">
+                                                    <IoPersonCircleSharp className="text-3xl text-text-secondary dark:text-slate-400 mr-2" />
+                                                    <h3 className="font-sans font-semibold text-sm text-text-primary dark:text-slate-200">
                                                         {review?.customerName}
-                                                    </span>
-                                                </span>
-                                                <span className="text-xs my-2">
-                                                    {review?.reviewText.length > 50 ? review?.reviewText.slice(0, 50) + "..." : review?.reviewText}
-                                                </span>
-
-                                                <span className="text-gray-500 text-[0.5rem] absolute bottom-[0.4rem]">
+                                                    </h3>
+                                                </div>
+                                                <p className="font-sans text-xs text-text-secondary dark:text-slate-300 mb-1 italic">
+                                                    "{review?.reviewText.length > 100 ? review?.reviewText.slice(0, 100) + "..." : review?.reviewText}"
+                                                </p>
+                                                <p className="font-sans text-[0.65rem] text-text-secondary/70 dark:text-slate-400/70 mt-2 text-right">
                                                     {new Date(
                                                         review?.date
                                                     ).toLocaleString('en-GB', { timeZone: 'UTC', hour12: true, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '')}
-                                                </span>
+                                                </p>
                                             </div>
                                         )
                                     }
@@ -370,35 +360,29 @@ export default function ExploreSalons() {
                             </div>
                         </div>
 
+                        {/* Write a review section */}
                         <div>
-                            {
-                                reviews.length === 0 &&
-                                <div className="text-[#3b5a979e] text-lg mt-2 font-bold">
-                                    No reviews
-                                </div>
+                            { reviews.length === 0 && salon.hasData && /* Show only if salon data has loaded and no reviews */
+                                <p className="font-sans text-text-secondary dark:text-slate-300 text-center w-full my-4">
+                                    Be the first to review this salon!
+                                </p>
                             }
-                            <h1 className="font-bold text-2xl my-6 flex flex-row">
-                                <FaUserPen className="mt-[0.35rem] mr-3" /> Write a review:
+                            <h1 className="font-heading text-xl text-text-primary dark:text-slate-100 my-6 flex items-center">
+                                <FaUserPen className="mr-3" /> Write a review:
                             </h1>
-                            <div>
-                                <div className="flex flex-col bg-[#ffffffcd] p-4 rounded-xl shadow-lg w-full">
-                                    <span className="font-bold text-gray-500 text-[2rem]">
-
-                                    </span>
-                                    <span className="text-xs my-2 w-full px-5">
-                                        <textarea className="w-full h-24 p-2 rounded-md border-gray-400 border border-1 outline-none" placeholder="Write your review here..." value={
-                                            review
-                                        } onChange={(e) => {
-                                            setReview(e.target.value);
-                                        }} />
-                                        {
-                                            alert.message && <div className={`text-center ${alert.isError ? "text-white" : "text-green-500"} text-sm ${alert.isError ? "bg-red-500" : "bg-lime-200"} me-2 rounded-md p-1 mt-3`}>
-                                                {alert.message}
-                                            </div>
-                                        }
-                                        <IconButton callback={writeReview} className="mt-2" direction="left" icon={<FaUserPen className="ml-2" />} text="Write a review" />
-                                    </span>
-                                </div>
+                            <div className="bg-white dark:bg-brand-gray/80 rounded-lg shadow-md p-4 sm:p-6">
+                                <textarea
+                                    className="font-sans w-full h-24 p-3 border rounded-lg bg-slate-50 dark:bg-brand-gray/70 border-brand-gray/30 dark:border-brand-gray/60 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none placeholder:text-text-secondary/70 dark:placeholder:text-slate-400 text-text-primary dark:text-slate-100 mb-4"
+                                    placeholder="Share your experience..."
+                                    value={review}
+                                    onChange={(e) => { setReview(e.target.value); }}
+                                />
+                                {
+                                    alert.message && <div className={`text-center text-sm rounded-lg p-3 mb-4 font-sans ${alert.isError ? 'bg-red-100 dark:bg-red-500/30 border border-red-400 dark:border-red-500/50 text-red-700 dark:text-red-300' : 'bg-green-100 dark:bg-green-500/30 border border-green-400 dark:border-green-500/50 text-green-700 dark:text-green-300'}`}>
+                                        {alert.message}
+                                    </div>
+                                }
+                                <IconButton callback={writeReview} className="w-full sm:w-auto justify-center" direction="left" icon={<FaUserPen className="ml-2" />} text="Submit Review" />
                             </div>
                         </div>
                     </>

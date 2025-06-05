@@ -1,6 +1,5 @@
-import Header from "../../components/header/Header";
 import IconButton from "../../components/iconButton/IconButton";
-import bg from '../../assets/logRegBG.svg'
+import bg from '../../assets/logRegBG.svg';
 import salon from '../../assets/salon.svg';
 import customer from '../../assets/booking.svg';
 import { IoPerson } from "react-icons/io5";
@@ -14,49 +13,42 @@ export default function RegistrationPage() {
     const [page, setPage] = useState("");
 
     return (
-        <div className="overflow-hidden h-screen">
-            <Header></Header>
+        <div className="overflow-hidden min-h-screen flex flex-col items-center justify-center p-4"> {/* Ensure full height and centering */}
             <div style={{
                 background: `url(${bg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center"
-            }} className="absolute top-0 h-screen w-screen">
+            }} className="absolute inset-0 h-full w-full z-[-1]"> {/* BG Layer */}
             </div>
 
-
-            <div className={`flex h-[80vh] relative ${page !== "" ? "top-[-40rem]" : "top-[0rem]"} duration-700 transition-all`}>
-                <div className="m-auto">
-                    {/* Card */}
-                    <div className='rounded-sm glass-bg p-6 max-w-[960px] m-auto border border-black' style={{
-                        backgroundColor: "rgb(87 112 182 / 32%)"
-                    }}>
-                        <h1 className="text-[#d18d32] text-[2rem] font-bold mb-10" style={{
-                            textShadow: "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black"
-                        }}>
-                            Register
-                        </h1>
-                        <div className="flex flex-row space-x-10">
-                            <div className="flex flex-col">
-                                <img className="h-[16rem]" src={salon} alt="Salon Registration" />
-                                <IconButton icon={<FaShop size={20} className="mr-4" />} text="Register your Salon" callback={() => { setPage("salon") }} />
-                            </div>
-                            <div className="border border-black"></div>
-                            <div className="flex flex-col">
-                                <img className="h-[16rem]" src={customer} alt="Salon Registration" />
-                                <IconButton icon={<IoPerson size={20} className="mr-4" />} text="Register as customer" callback={() => { setPage("customer") }} />
-                            </div>
+            {/* Selection Container */}
+            <div className={`flex items-center justify-center w-full transition-all duration-700 ${page !== "" ? "opacity-0 pointer-events-none absolute -top-[100%]" : "opacity-100 relative"}`}>
+                <div className="bg-white dark:bg-brand-gray/80 backdrop-blur-md p-8 sm:p-10 rounded-xl shadow-2xl m-auto max-w-3xl w-[90%]">
+                    <h1 className="font-heading text-3xl sm:text-4xl text-brand-blue dark:text-white mb-8 sm:mb-10 text-center">
+                        Register
+                    </h1>
+                    <div className="flex flex-col sm:flex-row sm:space-x-10 space-y-6 sm:space-y-0 items-center justify-center">
+                        <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-slate-100 dark:hover:bg-brand-gray/70 transition-colors">
+                            <img className="h-[10rem] sm:h-[12rem] mb-4" src={salon} alt="Salon Registration" />
+                            <IconButton icon={<FaShop size={20} className="mr-2 sm:mr-4" />} text="Register your Salon" callback={() => { setPage("salon") }} className="w-full sm:w-auto justify-center" />
+                        </div>
+                        <div className="hidden sm:block border-r border-brand-gray/30 dark:border-brand-gray/60 mx-4 h-48 self-center"></div>
+                        <div className="flex flex-col items-center text-center p-4 rounded-lg hover:bg-slate-100 dark:hover:bg-brand-gray/70 transition-colors">
+                            <img className="h-[10rem] sm:h-[12rem] mb-4" src={customer} alt="Customer Registration" />
+                            <IconButton icon={<IoPerson size={20} className="mr-2 sm:mr-4" />} text="Register as Customer" callback={() => { setPage("customer") }} className="w-full sm:w-auto justify-center" />
                         </div>
                     </div>
                 </div>
             </div>
 
-
-            <div className={`relative ${page === "customer" ? "flex h-[80vh] top-[-38rem]" : "top-[100rem]"} duration-700 transition-all`}>
-                <RegistrationCutomer />
+            {/* Customer Registration Form Container */}
+            <div className={`w-full transition-all duration-700 absolute ${page === "customer" ? "opacity-100 z-10" : "opacity-0 pointer-events-none -top-[100%]"}`}>
+                {page === "customer" && <RegistrationCutomer />}
             </div>
 
-            <div className={`relative ${page === "salon" ? "flex h-[80vh] top-[-71rem]" : "top-[100rem]"} duration-700 transition-all`}>
-                <SalonRegistration />
+            {/* Salon Registration Form Container */}
+            <div className={`w-full transition-all duration-700 absolute ${page === "salon" ? "opacity-100 z-10" : "opacity-0 pointer-events-none -top-[100%]"}`}>
+                {page === "salon" && <SalonRegistration />}
             </div>
         </div>);
 }

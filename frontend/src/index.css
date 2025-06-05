@@ -1,6 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-text-primary;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
 
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
@@ -33,4 +44,15 @@
   -webkit-backdrop-filter: blur(10px); /* Blur effect for older browsers */
   border-radius: 10px; /* Optional: Rounded corners */
   padding: 20px; /* Optional: Adjust padding as needed */
+}
+
+/* Swiper custom pagination styles */
+.swiper-pagination-bullet {
+    background-color: #cbd5e1; /* slate-300 */
+    opacity: 0.7;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+.swiper-pagination-bullet-active {
+    background-color: #14B8A6; /* brand-accent */
+    opacity: 1;
 }

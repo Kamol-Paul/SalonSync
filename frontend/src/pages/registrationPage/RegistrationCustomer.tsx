@@ -94,89 +94,78 @@ export default function RegistrationCutomer() {
     };
 
     return (
-        <div
-            className="rounded-sm glass-bg p-6 m-auto border border-black max-w-[960px]"
-            style={{
-                backgroundColor: "rgb(87 112 182 / 32%)",
-            }}
-        >
-            <h1
-                className="text-[#d18d32] text-[2rem] font-bold mb-10"
-                style={{
-                    textShadow:
-                        "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black",
-                }}
-            >
+        <div className="bg-white dark:bg-brand-gray/80 backdrop-blur-md p-8 sm:p-10 rounded-xl shadow-2xl m-auto max-w-4xl w-[90%]">
+            <h1 className="font-heading text-3xl sm:text-4xl text-brand-blue dark:text-white mb-8 sm:mb-10 text-center">
                 Customer Registration
             </h1>
-            <div className="flex flex-row space-x-10 justify-around">
-                <div className="flex flex-col w-[20rem]">
+            <div className="flex flex-col sm:flex-row sm:space-x-10 justify-around">
+                <div className="w-full sm:w-1/2 p-4 items-center justify-center hidden sm:flex">
                     <img
-                        className="h-[25rem] bg-white rounded-xl w-[20rem] bg-opacity-50"
+                        className="h-auto max-h-[20rem] w-auto bg-transparent rounded-xl"
                         src={customerReg}
-                        alt="Salon Registration" />
+                        alt="Customer Registration Visual" />
                 </div>
 
-                <div className="border border-black"></div>
+                <div className="hidden sm:block border-r border-brand-gray/30 dark:border-brand-gray/60 mx-4"></div>
 
-                <div>
-                    <div className="flex flex-col w-[20rem]">
-                        <input
-                            onChange={(e) => {
-                                setFormData({ ...formData, username: e.target.value });
-                            }}
-                            type="text"
-                            placeholder="Enter your name"
-                            className="border border-black outline-none p-2 rounded-md mb-4"
-                        />
+                <div className="w-full sm:w-1/2 p-4 flex flex-col justify-center">
+                    <input
+                        onChange={(e) => {
+                            setFormData({ ...formData, username: e.target.value });
+                        }}
+                        type="text"
+                        placeholder="Enter your name"
+                        className="font-sans w-full p-3 border rounded-lg bg-slate-50 dark:bg-brand-gray/70 border-brand-gray/30 dark:border-brand-gray/60 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none placeholder:text-text-secondary/70 dark:placeholder:text-slate-400 text-text-primary dark:text-slate-100 mb-6"
+                    />
 
-                        <input
-                            onChange={(e) => {
-                                setFormData({ ...formData, address: e.target.value });
-                            }}
-                            type="text"
-                            placeholder="Enter your address"
-                            className="border border-black outline-none p-2 rounded-md mb-4"
-                        />
+                    <input
+                        onChange={(e) => {
+                            setFormData({ ...formData, address: e.target.value });
+                        }}
+                        type="text"
+                        placeholder="Enter your address"
+                        className="font-sans w-full p-3 border rounded-lg bg-slate-50 dark:bg-brand-gray/70 border-brand-gray/30 dark:border-brand-gray/60 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none placeholder:text-text-secondary/70 dark:placeholder:text-slate-400 text-text-primary dark:text-slate-100 mb-6"
+                    />
 
-                        <input
-                            onChange={(e) => {
-                                setFormData({ ...formData, phoneNumber: e.target.value });
-                            }}
-                            type="text"
-                            placeholder="Enter your phone number"
-                            className="border border-black outline-none p-2 rounded-md mb-4"
-                        />
+                    <input
+                        onChange={(e) => {
+                            setFormData({ ...formData, phoneNumber: e.target.value });
+                        }}
+                        type="text"
+                        placeholder="Enter your phone number"
+                        className="font-sans w-full p-3 border rounded-lg bg-slate-50 dark:bg-brand-gray/70 border-brand-gray/30 dark:border-brand-gray/60 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none placeholder:text-text-secondary/70 dark:placeholder:text-slate-400 text-text-primary dark:text-slate-100 mb-6"
+                    />
 
-                        <input
-                            onChange={(e) => {
-                                setFormData({ ...formData, email: e.target.value });
-                            }}
-                            type="text"
-                            placeholder="Enter your email"
-                            className="border border-black outline-none p-2 rounded-md mb-4"
-                        />
+                    <input
+                        onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                        }}
+                        type="text"
+                        placeholder="Enter your email"
+                        className="font-sans w-full p-3 border rounded-lg bg-slate-50 dark:bg-brand-gray/70 border-brand-gray/30 dark:border-brand-gray/60 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none placeholder:text-text-secondary/70 dark:placeholder:text-slate-400 text-text-primary dark:text-slate-100 mb-6"
+                    />
 
-                        <input
-                            onChange={(e) => {
-                                setFormData({ ...formData, password: e.target.value });
-                            }}
-                            type="password"
-                            placeholder="Enter your password"
-                            className="border border-black outline-none p-2 rounded-md mb-4"
-                        />
+                    <input
+                        onChange={(e) => {
+                            setFormData({ ...formData, password: e.target.value });
+                        }}
+                        type="password"
+                        placeholder="Enter your password"
+                        className="font-sans w-full p-3 border rounded-lg bg-slate-50 dark:bg-brand-gray/70 border-brand-gray/30 dark:border-brand-gray/60 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none placeholder:text-text-secondary/70 dark:placeholder:text-slate-400 text-text-primary dark:text-slate-100 mb-6"
+                    />
 
-                        {/* warning div */}
-                        {
-                            alert.message && <div className={`text-center ${alert.isError ? "text-white" : "text-green-500"} text-sm ${alert.isError ? "bg-red-500" : "bg-lime-200"} me-2 rounded-md p-1`}>
-                                {alert.message}
-                            </div>
-                        }
-
+                    {/* warning div */}
+                    {
+                        alert.message && <div className={`text-center text-sm rounded-lg p-3 mb-4 font-sans ${alert.isError ? 'bg-red-100 dark:bg-red-500/30 border border-red-400 dark:border-red-500/50 text-red-700 dark:text-red-300' : 'bg-green-100 dark:bg-green-500/30 border border-green-400 dark:border-green-500/50 text-green-700 dark:text-green-300'}`}>
+                            {alert.message}
+                        </div>
+                    }
+                    <div className="w-full">
                         <IconButton
                             icon={<FaArrowAltCircleRight />}
                             text="Register"
                             callback={onSubmit}
+                            className="w-full justify-center"
                         />
                     </div>
                 </div>
